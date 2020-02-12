@@ -1,0 +1,30 @@
+<% provide(:title, 'Users') %>
+<h1>利用者一覧</h1>
+
+<div class="col-md-10 col-md-offset-1">
+  <p>ユーザー名検索</p>
+    <%= form_tag(users_path, :method => "get") do %>
+      <%= text_field_tag :search %>
+      <%= submit_tag "検索", :username => nil, class: "btn-defalt" %>
+    <% end %>
+<%= will_paginate @users, previous_label: '&lt 前へ', next_label: '次へ &gt' %>
+  <table class="table table-condensed table-hover" id="table-users">
+    <thead>
+      <tr>
+        <th><%= User.human_attribute_name :name %></th>
+      </tr>
+    </thead>
+    
+    <% @users.each do |user| %>
+    <tr>
+      <td><%= link_to user.name, user %> 
+        <% if current_user.admin? && !current_user?(user) %>
+          |  <%= link_to "削除", user, method: :delete,
+              data: {confirm: "削除してよろしいですか？" } %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+  <%= will_paginate @users, previous_label: '&lt 前へ', next_label: '次へ &gt' %>
+</div>
