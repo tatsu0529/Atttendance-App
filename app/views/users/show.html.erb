@@ -2,17 +2,74 @@
 <div>
   <table class="table table-bordered table-condensed user-table">
     <tr>
-      <td>勤怠管理</td>
+      <td>
+        <%= link_to "⇦", user_path(date: @first_day.prev_month), class: "btn btn-default" %>
+        【<%= l(@first_day, format: :middle) %>】勤怠管理表
+        <%= link_to "⇨", user_path(date: @first_day.next_month), class: "btn btn-default" %>
+        </td>
       <td>指定勤務時間<%= format_basic_info(@user.work_time) %></td>
       <td colspan="2">基本時間<%= format_basic_info(@user. basic_time) %></td>
-      <td>初日</td>
+      <td>初日:<%= l(@first_day, format: :short) %></td>
     </tr>
     
     <tr>
       <td>所属:<%= @user.department.present? ? @user.department : "未所属"%></td>
       <td>氏名:  <%= @user.name %></td>
+      <td>コード</td>
       <td>出勤日数</td>
-      <td>月末日</td>
+      <td>月末日<%= l(@last_day, format: :short) %></td>
     </tr>
+  </table>
+</div>
+
+<div class="btn-users-show">
+  <%= link_to "勤怠を編集", '#', class: "btn btn-default" %>
+</div>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+    <thead>
+      <tr>
+        <th rowspan="2">日付</th>
+        <th rowspan="2">曜日</th>
+        <th colspan="3">出社</th>
+        <th colspan="2">退社</th>
+        <th rowspan="2">在社時間</th>
+        <th rowspan="2">備考</th>
+      </tr>
+      <tr>
+        <th>時</th>
+        <th>分</th>
+        <th></th>
+        <th>時</th>
+        <th>分</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% @attendances.each do |day| %>
+      <% css_class = case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
+          when '土'
+            'text-primary'
+          when '日'
+            'text-danger'
+          end %>
+        <tr>
+          <td><%= l(day.worked_on, format: :short) %></td>
+          <td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday]%></td>
+          <td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
+          <td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
+          <td>
+            <% if (Date.current == day.worked_on) && day.started_at.nil? %>
+              <%= link_to "出社", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
+            <% end %>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 </div>
