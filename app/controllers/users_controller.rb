@@ -6,13 +6,17 @@ class UsersController < ApplicationController
   before_action :set_one_month, only: :show
   
   def index
-    @users = User.all
+    @users = User.paginate(page: params[:page], per_page: 20)
   end
   
   def import
     # fileはtmpに自動で一時保存される
     User.import(params[:file])
     redirect_to users_url
+  end
+  
+  def attended_employees
+    @users = User.all
   end
   
   def show

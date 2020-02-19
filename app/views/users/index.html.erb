@@ -7,9 +7,9 @@
   <%= file_field_tag :file %><br/>
   <%= submit_tag "CSVをインポート", class: "btn btn-primary" %>
   <% end %>
+    <%= will_paginate @users, previous_label: '&lt 前へ', next_label: '次へ &gt' %>
     
   <table class="table table-condensed table-hover" id="table-users">
-    
     <p>Example</p>
     <% @users.each do |user| %>
       <tr>
@@ -35,6 +35,7 @@
       </tr>
     <% end %>
   </table>
+    <%= will_paginate @users, previous_label: '&lt 前へ', next_label: '次へ &gt' %>
 </div>
 
 <!--モーダルウインドウ表示-->
