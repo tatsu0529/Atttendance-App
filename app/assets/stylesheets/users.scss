@@ -54,6 +54,10 @@
   td {
     vertical-align: middle;
   }  
+
+.btn-index {
+  margin-top: 10px;
+  }
 }
 
 /* 基本情報編集モーダルウインドウ */
@@ -122,4 +126,23 @@
 .btn-basic-info {
   margin: 15px 0;
   width: 30%;
+}
+
+
+
+
+.menu__item {
+  cursor: pointer;
+  display: block;
+  margin-bottom: 1px;
+  position: relative;
+}
+
+.submenu {
+  display: none;
+}
+.submenu__item {
+  border-bottom: 1px solid #5200b7;
+  color: #222;
+  padding: 1rem;
 }
