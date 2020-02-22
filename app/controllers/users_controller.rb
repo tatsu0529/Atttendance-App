@@ -9,6 +9,9 @@ class UsersController < ApplicationController
     @users = User.paginate(page: params[:page], per_page: 20)
   end
   
+  def base_index
+  end 
+  
   def import
     # fileはtmpに自動で一時保存される
     User.import(params[:file])
@@ -16,7 +19,7 @@ class UsersController < ApplicationController
   end
   
   def attended_employees
-    @users = User.all
+    @user = User.all
   end
   
   def show

@@ -8,12 +8,10 @@
         <td>社員番号</td>
         <td>名前</td>
       </tr>
-      <% @users.each do |user| %>
+      <% @user.each do |user| %>
         <tr>
-          <% if day.started_at.present? && day.finished_at.nil? %>
-            <td><%= @users.employee_number %></td>
-            <td><%= @users.name %></td>
-          <% end %>
+          <td><%= @user.employee_number %></td>
+          <td><%= @user.name %></td>
         </tr>
       <% end %>
     </thead>

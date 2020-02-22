@@ -26,16 +26,17 @@ ActiveRecord::Schema.define(version: 20200212075830) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
+    t.string "employee_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2020-02-18 23:00:00"
-    t.datetime "work_time", default: "2020-02-18 22:30:00"
-    t.datetime "work_start_time", default: "2020-02-19 00:00:00"
-    t.datetime "work_finish_time", default: "2020-02-19 09:00:00"
+    t.datetime "basic_time", default: "2020-02-21 23:00:00"
+    t.datetime "work_time", default: "2020-02-21 22:30:00"
+    t.datetime "work_start_time", default: "2020-02-22 00:00:00"
+    t.datetime "work_finish_time", default: "2020-02-22 09:00:00"
   end
 
 end
