@@ -9,9 +9,6 @@ class UsersController < ApplicationController
     @users = User.paginate(page: params[:page], per_page: 20)
   end
   
-  def base_index
-  end 
-  
   def import
     # fileはtmpに自動で一時保存される
     User.import(params[:file])
@@ -19,7 +16,19 @@ class UsersController < ApplicationController
   end
   
   def attended_employees
-    @user = User.all
+    @now_users = []
+    @now_users_employee_number = []
+    User.all.each do |user|
+    if user.attendances.
+      any?{|day|
+       ( day.worked_on == Date.today &&
+         !day.started_at.blank? &&
+         day.finished_at.blank? )
+        }
+     @now_users.push(user.name)
+     @now_users_employee_number.push(user.employee_number)
+    end
+   end
   end
   
   def show
@@ -76,38 +85,10 @@ class UsersController < ApplicationController
   private
   
     def user_params
-      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
     
     def basic_info_params
-      params.require(:user).permit(:department, :basic_time, :work_time)
-    end
-    
-    
-    # beforeフィルター
-    
-    # paramsハッシュからユーザーを取得する
-    def set_user
-      @user = User.find(params[:id])
-    end
-    
-    #ログイン済みのユーザーかを検証
-    
-    def logged_in_user
-      unless logged_in?
-      store_location
-      flash[:danger] = "ログインしてください。"
-      redirect_to login_url
-    end
-  end
-  
-    # アクセスしたユーザーが現在ログインしているユーザーかを確認する
-    def correct_user
-      redirect_to(root_url) unless current_user?(@user)
-    end
-    
-    # システム管理権限所有かを判定
-    def admin_user
-      redirect_to root_url unless current_user.admin?
+      params.require(:user).permit(:affiliation, :employee_number, :uid, :basic_time, :work_time, :designed_work_started_time, :designed_work_finished_time)
     end
 end

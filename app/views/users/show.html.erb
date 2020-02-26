@@ -17,10 +17,9 @@
       </tr>
       
       <tr>
-        <td>所属:<%= @user.department.present? ? @user.department : "上長"%></td>
+        <td>所属:<%= @user.affiliation %></td>
         <td>氏名:  <%= @user.name %></td>
-        <td>コード</td>
-        <td>2222</td>
+        <td colspan="2">コード<%= @user.employee_number %></td>
         <td>出勤日数:<%= @worked_sum %></td>
         <td>月末日<%= l(@last_day, format: :short) %></td>
       </tr>
@@ -56,7 +55,7 @@
   <p>【所属長承認申請のお知らせ】</p>
   <p>【勤怠変更申請のお知らせ】</p>
   <p>【残業申請のお知らせ】</p>
-  <%= link_to "勤怠を変更", '#', class: "btn btn-primary" %>
+  <%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary" %>
   <%= link_to "CSV出力", "#", class: "btn btn-primary" %><br/>
   <%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary" %>
 </div>

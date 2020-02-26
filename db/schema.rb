@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200212075830) do
+ActiveRecord::Schema.define(version: 20200226081911) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -23,20 +23,29 @@ ActiveRecord::Schema.define(version: 20200212075830) do
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
+  create_table "bases", force: :cascade do |t|
+    t.string "base_name"
+    t.integer "base_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
-    t.string "employee_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
+    t.datetime "basic_time", default: "2020-02-25 23:00:00"
+    t.datetime "work_time", default: "2020-02-25 22:30:00"
+    t.datetime "designed_work_start_time", default: "2020-02-26 00:00:00"
+    t.datetime "designed_work_finish_time", default: "2020-02-26 09:00:00"
+    t.string "affiliation"
     t.string "department"
-    t.datetime "basic_time", default: "2020-02-21 23:00:00"
-    t.datetime "work_time", default: "2020-02-21 22:30:00"
-    t.datetime "work_start_time", default: "2020-02-22 00:00:00"
-    t.datetime "work_finish_time", default: "2020-02-22 09:00:00"
+    t.integer "employee_number"
+    t.integer "uid"
   end
 
 end

@@ -8,10 +8,10 @@
         <td>社員番号</td>
         <td>名前</td>
       </tr>
-      <% @user.each do |user| %>
+      <% @now_users.each do |user| %>
         <tr>
-          <td></td>
-          <td><%= @user.name %></td>
+          <td><%= @now_users.employee_number %></td>
+          <td><%= @now_users.name %></td>
         </tr>
       <% end %>
     </thead>
