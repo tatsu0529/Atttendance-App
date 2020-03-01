@@ -1,0 +1,33 @@
+<% provide(:title, 'Edit-Base') %>
+
+<h1>拠点一覧</h1>
+
+<table class="table table-bordered table-condensed user-table">
+  <tr>
+    <td></td>
+    <td></td>
+    <td>拠点番号</td>
+    <td>拠点名</td>
+    <td>勤怠種類</td>
+  </tr>
+  
+  <%= @base.each do |base|%>
+  <tr>
+    <%= form_with(model: @user, local: true) do |f| %>
+      <td></td>
+      <td></td>
+      <td><%= f.text_field :name, class: "form-control" %></td>
+      <td><%= f.text_field :name, class: "form-control" %></td>
+      <td>
+        <form method="get" action="select.html">
+            <p>
+              <select name="example" required>
+              <option value=""></option>
+              <option value="選択肢1">出勤</option>
+              <option value="選択肢2">退勤</option>
+            </p>
+      </td>
+    <% end %>
+  </tr>
+  <% end %>
+</table>

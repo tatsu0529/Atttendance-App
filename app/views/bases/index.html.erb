@@ -1,4 +1,4 @@
-<% provide(:title, 'Base Index') %>
+<% provide(:title, 'Base-Index') %>
 <% provide(:button_text, '編集') %>
 
 <h1>拠点一覧</h1>
@@ -12,24 +12,17 @@
     <td>勤怠種類</td>
   </tr>
   
+  <% @bases.each do |base| %>
   <tr>
     <%= form_with(model: @user, local: true) do |f| %>
       <td><%= link_to "編集", '#', class: "btn btn-primary" %></td>
       <td><%= link_to "削除", '#', class: "btn btn-primary" %></td>
-      <td><%= f.text_field :name, class: "form-control" %></td>
-      <td><%= f.text_field :name, class: "form-control" %></td>
-      <td>
-        <form method="get" action="select.html">
-            <p>
-              <select name="example" required>
-              <option value=""></option>
-              <option value="選択肢1">出勤</option>
-              <option value="選択肢2">退勤</option>
-            </p>
-      </td>
+      <td><%= @base.number %></td>
+      <td><%= @base.name %></td>
+      <td></td>
     <% end %>
   </tr>
 </table>
 
-<%= link_to "拠点情報追加", '#', class: "btn btn-lg btn-primary" %>
-  
+<%= f.submit "拠点情報追加", class: "btn btn-lg btn-primary" %>
+<% end %>

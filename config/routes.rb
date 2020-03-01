@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'bases/index'
 
   # トップページ
   root 'static_pages#top'
@@ -18,14 +17,12 @@ Rails.application.routes.draw do
       get 'edit_basic_info'
       patch 'update_basic_info'
       get 'attended_employees'
-      get 'base_index'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-      get 'edit_base_index'
-      patch 'update_edit_base_index'
     end
     resources :attendances, only: :update
   end
   resources :bases do
+    patch 'update'
   end
 end
