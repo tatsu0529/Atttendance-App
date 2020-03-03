@@ -17,5 +17,9 @@ User.create!(name: "管理者",
                email: email,
                password: password,
                password_confirmation: password)
-end
 
+
+Base.create!(name: "拠点１",
+             number: "1")
+
+end

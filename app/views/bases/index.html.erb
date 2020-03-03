@@ -12,15 +12,13 @@
     <td>勤怠種類</td>
   </tr>
   
-  <% @bases.each do |base| %>
   <tr>
     <%= form_with(model: @user, local: true) do |f| %>
-      <td><%= link_to "編集", '#', class: "btn btn-primary" %></td>
+      <td><%= link_to "修正", '#', class: "btn btn-primary" %></td>
       <td><%= link_to "削除", '#', class: "btn btn-primary" %></td>
-      <td><%= @base.number %></td>
-      <td><%= @base.name %></td>
       <td></td>
-    <% end %>
+      <td><%= @bases.name %></td>
+      <td></td>
   </tr>
 </table>
 
