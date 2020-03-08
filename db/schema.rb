@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20200226081911) do
   create_table "bases", force: :cascade do |t|
     t.string "name"
     t.integer "number"
+    t.integer "integer"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -38,10 +39,10 @@ ActiveRecord::Schema.define(version: 20200226081911) do
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
-    t.datetime "basic_time", default: "2020-03-02 23:00:00"
-    t.datetime "work_time", default: "2020-03-02 22:30:00"
-    t.datetime "designed_work_start_time", default: "2020-03-03 00:00:00"
-    t.datetime "designed_work_finish_time", default: "2020-03-03 09:00:00"
+    t.datetime "basic_time", default: "2020-03-07 23:00:00"
+    t.datetime "work_time", default: "2020-03-07 22:30:00"
+    t.datetime "designed_work_start_time", default: "2020-03-08 00:00:00"
+    t.datetime "designed_work_finish_time", default: "2020-03-08 09:00:00"
     t.string "affiliation"
     t.string "department"
     t.integer "employee_number"

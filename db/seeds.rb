@@ -13,13 +13,13 @@ User.create!(name: "管理者",
   name = Faker::Name.name
   email = "sample-#{n+1}@email.com"
   password = "password"
+  employee_number = "#{n+1}"
+  uid = "#{n+1}"
   User.create!(name: name,
                email: email,
                password: password,
-               password_confirmation: password)
-
-
-Base.create!(name: "拠点１",
-             number: "1")
-
+               password_confirmation: password,
+               affiliation: "freelance",
+               employee_number: employee_number,
+               uid: uid)
 end

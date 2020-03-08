@@ -22,8 +22,21 @@ class BasesController < ApplicationController
   @base = Base.new(base_params)
     if @base.save
       flash[:info] = "拠点情報を追加しました。"
+      redirect_to bases_url
+    else 
+      render :new
     end
+  end
+  
+  def new
+    @base = Base.new
   end 
+  
+  def destroy
+    @base.destroy
+    flash[:success] = "#{@base.name}のデータを削除しました。"
+    redirect_to bases_url
+  end
   
   
   private

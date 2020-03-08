@@ -25,4 +25,5 @@ Rails.application.routes.draw do
   resources :bases do
     patch 'update'
   end
+  get 'base/edit'
 end

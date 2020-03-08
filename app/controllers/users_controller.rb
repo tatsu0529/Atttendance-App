@@ -16,20 +16,12 @@ class UsersController < ApplicationController
   end
   
   def attended_employees
-    @now_users = []
-    @now_users_employee_number = []
-    User.all.each do |user|
-    if user.attendances.
-      any?{|day|
-       ( day.worked_on == Date.today &&
-         !day.started_at.blank? &&
-         day.finished_at.blank? )
-        }
-     @now_users.push(user.name)
-     @now_users_employee_number.push(user.employee_number)
+    Attendance.where.not(started_at: nil).each do |attendance|
+      if (Date.current == attendance.worked_on) && attendance.finished_at.nil?
+        @users = User.all.includes(:attendances)
+      end
     end
-   end
-  end
+  end 
   
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count

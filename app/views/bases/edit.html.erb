@@ -13,10 +13,10 @@
   
   <%= @base.each do |base|%>
   <tr>
-    <%= form_with(model: @user, local: true) do |f| %>
+    <%= form_with(model: @base, local: true) do |f| %>
       <td></td>
       <td></td>
-      <td><%= f.text_field :name, class: "form-control" %></td>
+      <td><%= f.text_field :number, class: "form-control" %></td>
       <td><%= f.text_field :name, class: "form-control" %></td>
       <td>
         <form method="get" action="select.html">

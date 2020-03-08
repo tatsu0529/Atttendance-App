@@ -8,10 +8,18 @@
         <td>社員番号</td>
         <td>名前</td>
       </tr>
-        <tr>
-          <td><%= @now_users_employee_number %></td>
-          <td><%= @now_users %></td>
-        </tr>
+       <tbody>
+        <% @users.each do |user| %>
+          <% user.attendances.each do |attendance| %>
+            <% if (Date.current == attendance.worked_on) && attendance.started_at != nil && attendance.finished_at == nil %>
+              <tr>
+                <td><%= user.employee_number %></td>
+                <td><%= user.name %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      </tbody>
     </thead>
   </table>
 </div>
