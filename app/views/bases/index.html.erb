@@ -13,21 +13,13 @@
   </tr>
   
   <% @bases.each do |base| %>
-  <tr>
-    <td><%= link_to "編集", '#', class: "btn btn-primary" %></td>
-    <td><%= link_to "削除", '#', class: "btn btn-primary", data: {confirm: "削除してよろしいですか？" } %></td>
-    <td><%= base.id %></td>
-    <td><%= base.name %></td>
-    <td>
-      <form method="get" action="select.html">
-        <p>
-          <select name="example" required>
-          <option value=""></option>
-          <option value="選択肢1">出勤</option>
-          <option value="選択肢2">退勤</option>
-        </p>
-    </td>
-  </tr>
+    <tr>
+      <td><%= link_to "編集", '#', class: "btn btn-primary" %></td>
+      <td><%= link_to "削除", '#', class: "btn btn-primary", data: {confirm: "削除してよろしいですか？" } %></td>
+      <td><%= base.id %></td>
+      <td><%= base.name %></td>
+      <td><%= base.attendance_sort %></td>
+    </tr>
   <% end %>
 </table>
 
