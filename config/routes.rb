@@ -22,8 +22,9 @@ Rails.application.routes.draw do
     end
     resources :attendances, only: :update
   end
-  resources :bases do
-    patch 'update'
+  resources :bases do 
+      member do
+      get 'edit_basic_info'
+    end 
   end
-  get 'base/edit'
 end

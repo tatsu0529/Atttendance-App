@@ -16,6 +16,8 @@ gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
+gem 'better_errors'
+gem 'binding_of_caller'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'

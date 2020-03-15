@@ -102,7 +102,7 @@
             'text-danger'
           end %>
         <tr>
-          <td><%= submit_tag "残業申請", class: "btn btn-primary" %></td>
+          <td><%= render 'modal' %></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday]%></td>
           <td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
@@ -163,3 +163,5 @@
     </tfoot>  
   </table>
 </div>
+
+<%= render 'modal' %>

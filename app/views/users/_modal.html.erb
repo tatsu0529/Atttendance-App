@@ -1,0 +1,56 @@
+<button type="button" class="btn btn-primary mt-5" data-toggle="modal" data-target="#post">残業申請</button>
+  <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <%= form_with(model: @user, local: true, method: :patch) do |f| %>
+          <table class="table table-bordered table-condensed user-table">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>曜日</th>
+                <th>
+                  <%= f.label :"終了予定時間", class: "label-#{yield(:class_text)}" %>
+                </th>
+                <th>翌日</th>
+                <th>
+                  <%= f.label :name, class: "label-#{yield(:class_text)}" %>
+                </th>
+                <th>
+                  <%= f.label :"承認印", class: "label-#{yield(:class_text)}" %></br>
+                </th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <tr>
+                <th></th>
+                <th></th>
+                <th>
+                  <%= f.text_field :"終了予定時間", class: "form-control", placeholder: "拠点番号を記入してください" %>
+                </th>
+                <th>
+                  <%=f.check_box :remember_me, id: "remember_me" %>
+                </th>
+                <th>
+                  <%= f.text_field :name, class: "form-control", placeholder: "拠点名を記入してください" %>
+                </th>
+                <th>
+                  <%= f.select :"承認印", [["選択してください", 0],["承認", 1],["否認", 2]] %>
+                </th>
+              </tr>
+            </tbody>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary btn block">残業申請する</button>
+            </div>
+          </table>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+  
+  
+  
+
