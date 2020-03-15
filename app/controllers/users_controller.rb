@@ -16,9 +16,9 @@ class UsersController < ApplicationController
   end
   
   def attended_employees
-    Attendance.where.not(started_at: nil).each do |attendance|
-      if (Date.current == attendance.worked_on) && attendance.finished_at.nil?
-        @users = User.all.includes(:attendances)
+    if Attendance.where.not(started_at: nil).where(finished_at: nil).present?
+    Attendance.where.not(started_at: nil).where(finished_at: nil).pluck(:user_id).each do |attendance|
+      @users = User.where(id:attendance)
       end
     end
   end 
