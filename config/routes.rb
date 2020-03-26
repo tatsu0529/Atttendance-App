@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   end
   resources :bases do 
       member do
-      get 'edit_basic_info'
+      get 'edit_basis_info'
     end 
   end
 end

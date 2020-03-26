@@ -1,11 +1,11 @@
 class BasesController < ApplicationController
-  before_action :set_base, only: [:update, :destroy, :edit_basic_info]
+  before_action :set_base, only: [:update, :destroy, :edit]
   
   def index
     @bases = Base.all
   end
   
-  def edit_basic_info
+  def edit
   end 
   
   def update

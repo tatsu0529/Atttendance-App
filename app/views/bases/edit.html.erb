@@ -1,21 +1,17 @@
 <% provide(:title, 'Edit-Base') %>
+<% provide(:button_text, '編集') %>
 
 <h1>拠点一覧</h1>
 
 <table class="table table-bordered table-condensed user-table">
   <tr>
-    <td></td>
-    <td></td>
     <td>拠点番号</td>
     <td>拠点名</td>
     <td>勤怠種類</td>
   </tr>
   
-  <%= @base.each do |base|%>
   <tr>
-    <%= form_with(model: @base, local: true) do |f| %>
-      <td></td>
-      <td></td>
+    <%= form_with(model: @base, url: basis_path, local: true, method: :patch) do |f| %>
       <td><%= f.text_field :number, class: "form-control" %></td>
       <td><%= f.text_field :name, class: "form-control" %></td>
       <td>
@@ -27,7 +23,10 @@
               <option value="選択肢2">退勤</option>
             </p>
       </td>
+      <table class="center">
+        <%= f.submit yield(:button_text), class: "btn btn-primary btn-lg btn-#{yield(:class_text)}" %>
+        <%= link_to "キャンセル", bases_path, class: "btn btn-default btn-lg" %>
+      </table>
     <% end %>
   </tr>
-  <% end %>
 </table>
