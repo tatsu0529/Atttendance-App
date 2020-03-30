@@ -2,7 +2,7 @@
   <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <%= form_with(model: @user, local: true, method: :patch) do |f| %>
+        <%= form_with(model: @user, local: true, method: :post) do |f| %>
           <table class="table table-bordered table-condensed user-table">
             <thead>
               <tr>
@@ -26,7 +26,7 @@
                 <th></th>
                 <th></th>
                 <th>
-                  <%= f.text_field :"終了予定時間", class: "form-control", placeholder: "拠点番号を記入してください" %>
+                  <%= f.time_field :"終了予定時間", class: "form-control", placeholder: "拠点番号を記入してください" %>
                 </th>
                 <th>
                   <%=f.check_box :remember_me, id: "remember_me" %>

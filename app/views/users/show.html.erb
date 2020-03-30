@@ -102,7 +102,7 @@
             'text-danger'
           end %>
         <tr>
-          <td><%= render 'modal' %></td>
+          <td><%= render 'attendances/overtime' %></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday]%></td>
           <td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
@@ -149,11 +149,8 @@
             <p>
               <select name="example" required>
               <option value=""></option>
-              <option value="選択肢1">選択肢のサンプル1</option>
-              <option value="選択肢2">選択肢のサンプル2</option>
-              <option value="選択肢3">選択肢のサンプル3</option>
-              <option value="選択肢4">選択肢のサンプル4</option>
-              <option value="選択肢5">選択肢のサンプル5</option>
+              <option value="選択肢1">上長A</option>
+              <option value="選択肢2">上長B</option>
               </select>
             </p>
             <p><input type="submit" value="申請"></p>
@@ -163,5 +160,3 @@
     </tfoot>  
   </table>
 </div>
-
-<%= render 'modal' %>

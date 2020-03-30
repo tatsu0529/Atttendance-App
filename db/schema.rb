@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200226081911) do
+ActiveRecord::Schema.define(version: 20200327070831) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -29,6 +29,23 @@ ActiveRecord::Schema.define(version: 20200226081911) do
     t.string "attendance_sort"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "applicant_id", null: false
+    t.integer "applied_id", null: false
+    t.integer "executive_application_id"
+    t.integer "attendance_change_id"
+    t.integer "overtime_id"
+    t.string "action", default: "", null: false
+    t.boolean "checked", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["applicant_id"], name: "index_notifications_on_applicant_id"
+    t.index ["applied_id"], name: "index_notifications_on_applied_id"
+    t.index ["attendance_change_id"], name: "index_notifications_on_attendance_change_id"
+    t.index ["executive_application_id"], name: "index_notifications_on_executive_application_id"
+    t.index ["overtime_id"], name: "index_notifications_on_overtime_id"
   end
 
   create_table "users", force: :cascade do |t|
