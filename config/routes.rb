@@ -20,7 +20,13 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
     end
-    resources :attendances, only: :update
+    resources :attendances do
+      member do
+        get 'notice_from_superior'
+        get 'notice_of_attendance_change'
+        get 'notice_of_overtime'
+      end
+    end
   end
   resources :bases do 
       member do

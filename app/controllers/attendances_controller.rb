@@ -54,6 +54,12 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
       redirect_to(root_url)
     end  
   end  
+  
+  def notice_from_superior
+    @user = User.find(params[:use_id])
+    @attendance = Attendance.find(params[:id])
+  end 
+  
 end
 
 
