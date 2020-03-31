@@ -59,6 +59,7 @@
 	<% else %>
 		<p>【所属長承認申請のお知らせ】</p>
 	<% end %>
+	
 	<!--勤怠変更申請のお知らせ条件分岐-->
 	<% if @attendance.present? %>
 		<%= link_to t(:allow_notice_from_superior), notice_of_attendance_change_user_attendance_path(@attendance) %>
@@ -66,14 +67,15 @@
 	<% else %>
 		<p>【勤怠変更申請のお知らせ】</p>
 	<% end %>
+	
 	<!--残業申請条件分岐-->
 	<% if @attendance.present? %>
-    <%= link_to t(:allow_notice_from_superior), notice_from_superior_user_attendance_path(@attendance) %>
-    <p><%= notice_for_superior.count"件のおしらせ" %></p>
+    <%= link_to t(:allow_notice_from_superior), notice_of_overtime_user_attendance_path(@attendance) %>
+    <p><%= notice_of_overtime.count"件のおしらせ" %></p>
   <% else %>
-    <p>【所属長承認申請のお知らせ】</p>  
+	<p>【残業申請のお知らせ】</p>  
   <% end %>
-	<p>【残業申請のお知らせ】</p>
+  
 	<%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary" %>
 	<%= link_to "CSV出力", "#", class: "btn btn-primary" %><br/>
 	<%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary" %>
