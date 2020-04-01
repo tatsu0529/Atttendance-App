@@ -11,7 +11,7 @@
     </div>
     <div class="modal-body">
       <table class="table table-bordered">
-        <% @attendances.each do |day| %>
+        
         <%= form_with(model: @attendance,url: user_attendances_path, local: true) do |f| %>
         
         <thead>
@@ -27,7 +27,7 @@
         
         <tbody>
           <tr>
-            <th><%= l(day.worked_on, format: :short) %></th>
+            <th><%= l(@attendance.worked_on, format: :short) %></th>
             <th></th>
             <th><%= f.time_field  :"終了予定時間", class: "form-control" %></th>
             <th><%= f.check_box :"翌日", id: "remember_me" %></th>
@@ -39,7 +39,6 @@
           <table class="center">
             <%= f.submit yield(:button_text), class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
           </table>
-        <% end %>
         <% end %>
       </table>
     </div>
