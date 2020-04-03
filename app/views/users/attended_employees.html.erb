@@ -8,13 +8,15 @@
         <td>社員番号</td>
         <td>名前</td>
       </tr>
-       <tbody>
-         <% @users.each do |user| %>
-          <tr>
-            <td><%= user.id %></td>
-            <td><%= user.name %></td>
-          </tr>
-         <% end %>
+      <tbody>
+        <% @attendance.each do |attendance| %>
+          <% User.where(id: attendance.user_id).each do |user|  %>
+            <tr>
+              <th><%= user.employee_number %></th>
+        	    <th><%= user.name %></th>
+        	  </tr>
+          <% end %>
+       <% end %>
       </tbody>
     </thead>
   </table>

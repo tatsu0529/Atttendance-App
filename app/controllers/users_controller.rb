@@ -16,18 +16,12 @@ class UsersController < ApplicationController
   end
   
   def attended_employees
-    if Attendance.where.not(started_at: nil).where(finished_at: nil).present?
-    Attendance.where.not(started_at: nil).where(finished_at: nil).pluck(:user_id).each do |attendance|
-      @users = User.where(id:attendance)
-      end
-    end
-  end 
-  
-  def show
-    @user = User.find(params[:date])
-    @worked_sum = @attendances.where.not(started_at: nil).count
+    @attendance = Attendance.where.not(started_at: nil).where(finished_at: nil)
   end
   
+  def show
+    @worked_sum = @attendances.where.not(started_at: nil).count
+  end
   
   def new
     @user = User.new
