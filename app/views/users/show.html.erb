@@ -123,7 +123,7 @@
 						'text-danger'
 					end %>
 				<tr>
-					<td><%= link_to "残業申請", overtime_user_attendance_path(@user), class: "btn btn-primary" %></td>
+					<td><%= link_to "残業申請", overtime_user_attendance_path(@user),remote: true, class: "btn btn-primary" %></td>
 					<td><%= l(day.worked_on, format: :short) %></td>
 					<td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday]%></td>
 					<td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
