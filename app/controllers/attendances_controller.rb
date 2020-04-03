@@ -71,8 +71,7 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
   end
   
   def overtime
-    @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:id])
+    @attendance = Attendance.find_by(worked_on: params[:date])
   end 
   
   def create_overtime
