@@ -116,28 +116,28 @@
 		
 		<tbody>
 			<% @attendances.each do |day| %>
-			<% css_class = case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
+			<% css_class = case $days_of_the_week[day.worked_on.wday]
 					when '土'
 						'text-primary'
 					when '日'
 						'text-danger'
 					end %>
 				<tr>
-					<td><%= link_to "残業申請", overtime_attendance_path(@user, date: day.worked_on),remote: true, class: "btn btn-primary" %></td>
+					<td><%= link_to "残業申請", attendances_overtime_user_path(@user, date: day.worked_on),remote: true, class: "btn btn-primary" %></td>
 					<td><%= l(day.worked_on, format: :short) %></td>
-					<td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday]%></td>
+					<td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday]%></td>
 					<td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
 					<td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
 					<td>
 						<% if (Date.current == day.worked_on) && day.started_at.nil?  %>
-							<%= link_to "出勤", attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
+							<%= link_to "出勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
 						<% end %>
 					</td>
 					<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? %></td>
 					<td><%= l(day.finished_at. floor_to(15.minutes), format: :minute) if day.finished_at.present? %></td>
 					<td>
 						<% if (Date.current == day.worked_on) && day.finished_at.nil? && day.started_at.present? %>
-							<%= link_to "退勤", attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
+							<%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
 						<% end %>
 					</td>
 					<td>

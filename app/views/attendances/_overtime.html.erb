@@ -12,20 +12,20 @@
     <div class="modal-body">
       <table class="table table-bordered">
         
-        <%= form_with(model: @attendance, local: true) do |f| %>
+        <%= form_with(model: @attendance, url: create_overtime_path, local: true) do |f| %>
         
         <thead>
           <tr>
             <th>日付</th>
             <th>曜日</th>
-            <th>終了予定時間</th>
+            <th><%= f.label :finish_time, class: "label-#{yield(:class_text)}" %></th>
             <th>翌日</th>
-            <th>業務処理内容</th>
+            <th><%= f.label :work_contents, class: "label-#{yield(:class_text)}"%></th>
             <th>指示者確認㊞</th>
           </tr>
         </thead>
         
-        			<% css_class = case %w{日 月 火 水 木 金 土}[@attendance.worked_on.wday]
+        			<% css_class = case $days_of_the_week[@attendance.worked_on.wday]
 					when '土'
 						'text-primary'
 					when '日'
@@ -35,7 +35,7 @@
         <tbody>
           <tr>
             <th><%= l(@attendance.worked_on, format: :short) %></th>
-            <th class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[@attendance.worked_on.wday]%></th>
+            <th class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday]%></th>
             <th><%= f.time_field  :"終了予定時間", class: "form-control" %></th>
             <th><%= f.check_box :"翌日", id: "remember_me" %></th>
             <th><%= f.text_field :"業務処理内容", class: "form-control" %></th>
