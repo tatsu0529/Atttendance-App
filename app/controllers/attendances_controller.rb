@@ -7,7 +7,6 @@ class AttendancesController < ApplicationController
 UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 
   def update
-    @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
     if @attendance.started_at.nil?
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0))
@@ -22,7 +21,7 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
         flash[:danger] = UPDATE_ERROR_MSG
       end
     end
-    redirect_to @user
+    redirect_to user_url
   end
   
   def edit_one_month
@@ -54,21 +53,6 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
       redirect_to(root_url)
     end  
   end  
-  
-  def notice_from_superior
-    @user = User.find(params[:use_id])
-    @attendance = Attendance.find(params[:id])
-  end 
-  
-  def notice_of_attendance_change
-    @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:id])
-  end 
-  
-  def notice_of_overtime
-    @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:id])
-  end
   
   def overtime
     @attendance = Attendance.find_by(worked_on: params[:date])

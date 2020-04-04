@@ -14,21 +14,18 @@ Rails.application.routes.draw do
   resources :users do
     collection { post :import }
     member do
-      get 'edit_basic_info'
-      patch 'update_basic_info'
       get 'attended_employees'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-       resources :attendances do
-       member do
-        get 'overtime'
-        get 'notice_from_superior'
-        get 'notice_of_attendance_change'
-        get 'notice_of_overtime'
-      end
+        resources :attendances do
+          member do
+            get 'overtime'
+            get 'notice_from_superior'
+            get 'notice_of_attendance_change'
+            get 'notice_of_overtime'
+          end
+        end
     end
-  end
-   
   end
   resources :bases do 
       member do

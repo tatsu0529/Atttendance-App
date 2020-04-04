@@ -25,10 +25,17 @@
           </tr>
         </thead>
         
+        			<% css_class = case %w{日 月 火 水 木 金 土}[@attendance.worked_on.wday]
+					when '土'
+						'text-primary'
+					when '日'
+						'text-danger'
+					end %>
+        
         <tbody>
           <tr>
             <th><%= l(@attendance.worked_on, format: :short) %></th>
-            <th></th>
+            <th class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[@attendance.worked_on.wday]%></th>
             <th><%= f.time_field  :"終了予定時間", class: "form-control" %></th>
             <th><%= f.check_box :"翌日", id: "remember_me" %></th>
             <th><%= f.text_field :"業務処理内容", class: "form-control" %></th>
