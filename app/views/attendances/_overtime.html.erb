@@ -10,44 +10,43 @@
       <h1 class="modal-title">残業申請</h1>
     </div>
     <div class="modal-body">
-      <table class="table table-bordered">
-        
-        <%= form_with(model: @attendance, url: create_overtime_path, local: true) do |f| %>
-        
-        <thead>
-          <tr>
-            <th>日付</th>
-            <th>曜日</th>
-            <th><%= f.label :finish_time, class: "label-#{yield(:class_text)}" %></th>
-            <th>翌日</th>
-            <th><%= f.label :work_contents, class: "label-#{yield(:class_text)}"%></th>
-            <th>指示者確認㊞</th>
-          </tr>
-        </thead>
-        
-        			<% css_class = case $days_of_the_week[@attendance.worked_on.wday]
-					when '土'
-						'text-primary'
-					when '日'
-						'text-danger'
-					end %>
-        
-        <tbody>
-          <tr>
-            <th><%= l(@attendance.worked_on, format: :short) %></th>
-            <th class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday]%></th>
-            <th><%= f.time_field  :"終了予定時間", class: "form-control" %></th>
-            <th><%= f.check_box :"翌日", id: "remember_me" %></th>
-            <th><%= f.text_field :"業務処理内容", class: "form-control" %></th>
-            <th><%= f.select :"指示者確認㊞", [["選択してください"],["上長A"],["上長B"]]%></th>
-          </tr>
-        </tbody>
-        
-          <table class="center">
-            <%= f.submit yield(:button_text), class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
-          </table>
-        <% end %>
-      </table>
+      <%= form_with(model: @attendance, url: attendances_request_overtime_user_path(@attendance), local: true, method: :patch) do |f| %>
+        <table class="table table-bordered">
+          
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>曜日</th>
+              <th>終了予定時間</th>
+              <th>翌日</th>
+              <th>業務内容</th>
+              <th>指示者確認㊞</th>
+            </tr>
+          </thead>
+          
+              <% css_class = case $days_of_the_week[@attendance.worked_on.wday]
+      					when '土'
+      						'text-primary'
+      					when '日'
+      						'text-danger'
+      					end %>
+              
+              <tbody>
+                <tr>
+                  <th><%= l(@attendance.worked_on, format: :short) %></th>
+                  <th class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday]%></th>
+                  <th><%= f.time_field :finish_time, class: "form-control" %></th>
+                  <th><%= f.check_box :tomorrow, id: "remember_me" %></th>
+                  <th><%= f.text_field :work_contents, class: "form-control" %></th>
+                  <th><%= f.select :mark_of_instructor, [["選択してください"],["上長A"],["上長B"]]%></th>
+                </tr>
+              </tbody>
+          
+            <table class="center">
+              <%= f.submit yield(:button_text), class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </table>
+        </table>
+      <% end %>
     </div>
   </div>
 </div>

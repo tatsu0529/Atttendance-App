@@ -22,14 +22,14 @@
           <% if current_user.admin? && !current_user?(user) %>
             |  <%= link_to "削除", user, method: :delete, class: "btn btn-primary",
                 data: {confirm: "削除してよろしいですか？" } %><br/>
-                <ul class="menu">
-                  <li class="menu__item">
-                      <a class="btn btn-index btn-primary js-menu__item__link" href="">編集</a>
-                      <ul class="submenu">
-                        <%= render 'index_edit_users_info' %>
-                      </ul>
-                  </li>
-              </ul>
+                <!--<ul class="menu">-->
+                <!--  <li class="menu__item">-->
+                <!--      <a class="btn btn-index btn-primary js-menu__item__link" href="">編集</a>-->
+                <!--      <ul class="submenu">-->
+                <%= link_to "編集", edit_user_path(user), class: "btn btn-lg btn-primary" %>
+          <!--            </ul>-->
+          <!--        </li>-->
+          <!--    </ul>-->
           <% end %>
         </td>
       </tr>

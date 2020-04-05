@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   
   # 新規作成
   get '/signup', to: 'users#new'
-  get '/create_overtime', to: 'attendance#overtime'
   
   # ログイン機能
   get     '/login', to: 'sessions#new'
@@ -19,8 +18,10 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'attendances/overtime'
+      patch 'attendances/request_overtime'
     end
-      resources :attendances, only: :update
+      resources :attendances do
+      end
     end
   
     resources :bases do 

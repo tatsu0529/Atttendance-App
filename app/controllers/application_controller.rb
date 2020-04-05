@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
     one_month = [*@first_day..@last_day]
     
     # ユーザーに紐づく一ヶ月分のレコードを検索し、取得する
-    @attendances = @user.attendances.where(worked_on: @first_day..@last_day)
+    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     
     unless one_month.count == @attendances.count
       ActiveRecord::Base.transaction do
@@ -46,11 +46,17 @@ class ApplicationController < ActionController::Base
       end
       @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     end
-
+    
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "ページ情報の取得に失敗しました、再アクセスしてください。"
     redirect_to root_url
   end
+  
+  # ユーザーに紐づく働いている日を検索し、取得する
+  def set_overtime
+    @attendances = @user.attendances.where(worked_on)
+  end 
+  
 end
 
 

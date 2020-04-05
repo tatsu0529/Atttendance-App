@@ -41,10 +41,6 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
-  
-  def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
-  end
 
   # 管理権限者、または現在ログインしているユーザーを許可します。
   def admin_or_correct_user
@@ -59,18 +55,16 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
     @attendance = Attendance.find_by(worked_on: params[:date])
   end 
   
-  def create_overtime
-    @attendance = Attendance.new(overtime_params)
-    if @attendance.save
-      flash[:success] = '残業を申請しました。'
-      redirect_to user_url
-    end
-  end
-  
+  def request_overtime
+    @attendance = Attendance.find(params[:id])
+    if @attendacne.update_attributes(overtime_params)
+      flash[:success] = "残業を申請しました。"
+    end 
+  end 
   
   private
   
-  def attendance_params
+  def overtime_params
     params.require(:attendance).permit(:finish_time, :work_contents)
   end 
   
