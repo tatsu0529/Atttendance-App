@@ -9,6 +9,7 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.datetime :finish_time
       t.string :work_contents
       t.string :mark_of_instructor
+      t.datetime :overtime_hours
 
       t.timestamps
     end
