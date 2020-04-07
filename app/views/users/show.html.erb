@@ -53,16 +53,29 @@
 
 <div class="btn-users-show">
 	<!--所長承認のお知らせ条件分岐-->
-
+	<% if @attendance.present? %>
+		<p><%= link_to "【所長承認のお知らせ】" %></p>
+		<% else %>
+			<p>【所長承認のお知らせ】</p>
+	<% end %>
 	
 	<!--勤怠変更申請のお知らせ条件分岐-->
-
+	<% if @attendance.present? %>
+		<p><%= link_to "【勤怠変更申請のお知らせ】" %></p>
+		<% else %>
+			<p>【勤怠変更申請のお知らせ】</p>
+	<% end %>
 	
 	<!--残業申請条件分岐-->
+	<% if @attendance.present? %>
+		<p><%= link_to "【残業申請のお知らせ】", attendances_request_form_overtime_user_path %></p>
+		<% else %>
+			<p>【残業申請のお知らせ】</p>
+	<% end %>
   
-	<%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary" %>
-	<%= link_to "CSV出力", "#", class: "btn btn-primary" %><br/>
-	<%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary" %>
+	<%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary btn-attendance" %>
+	<%= link_to "CSV出力", "#", class: "btn btn-primary btn-attendance" %><br/>
+	<%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary btn-attendance" %>
 </div>
 
 <div>
