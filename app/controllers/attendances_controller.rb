@@ -65,9 +65,8 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
     redirect_to users_url
   end 
   
-  def request_form_overtime
-    @user = User.find(params[:id])
-    @attendance = Attendance.find(params[:id])
+  def overtime_confirmation
+    @attendance = Attendance.where.not(finish_time: nil)
   end
   
   private

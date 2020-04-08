@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'attendances/overtime'
-      get 'attendances/request_form_overtime'
+      get 'attendances/overtime_confirmation'
       patch 'attendances/request_overtime'
       patch 'attendances/reply_overtime'
     end

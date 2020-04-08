@@ -68,8 +68,8 @@
 	
 	<!--残業申請条件分岐-->
 	<% if @attendance.present? %>
-		<p><%= link_to "【残業申請のお知らせ】", attendances_request_form_overtime_user_path %>
-			 <%= "#{@attendance}件の通知があります。" %>
+		<p><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance) %>
+			 <%= "#{@overtime_sum}件の通知があります。" %>
 		</p>
 		<% else %>
 			<p>【残業申請のお知らせ】</p>
@@ -188,3 +188,4 @@
 
 <!--モーダル 表示-->
 <div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="overtime_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
