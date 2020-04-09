@@ -1,10 +1,11 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: :edit_one_month
+  before_action :set_user, only: [:edit_one_month, :overtime]
   before_action :logged_in_user, only: [:update, :edit_one_month]
-  before_action :set_one_month, only: :edit_one_month
+  before_action :set_one_month, only: [:edit_one_month, :overtime]
 
 
 UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
+REQUEST_ERROR_MSG = "残業申請に失敗しました。やり直してください。"
 
   def update
     @user = User.find(params[:user_id])
@@ -51,20 +52,25 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
     end  
   end  
   
+  # 残業申請モーダル表示
   def overtime
-    @attendance = Attendance.find_by(worked_on: params[:date])
+    @attendance = current_user.attendances.find_by(worked_on: params[:date])
   end 
   
+  # 残業申請
   def request_overtime
     @attendance = Attendance.find(params[:id])
     if @attendance.started_at.present?
       if @attendance.update_attributes(overtime_params)
         flash[:success] = "残業を申請しました。"
+      else
+        flash[:danger] = REQUEST_ERROR_MSG
       end 
     end
-    redirect_to users_url
+    redirect_to user_url(current_user)
   end 
   
+  # 残業確認モーダル表示
   def overtime_confirmation
     @attendance = Attendance.where.not(finish_time: nil)
   end
@@ -76,7 +82,7 @@ UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してくださ
   end
   
   def overtime_params
-    params.require(:attendance).permit(:finish_time, :work_contents)
+    params.require(:attendance).permit(:finish_time, :work_contents, :mark_of_instructor)
   end 
   
 end

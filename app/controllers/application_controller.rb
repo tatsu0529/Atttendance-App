@@ -36,10 +36,8 @@ class ApplicationController < ActionController::Base
     Date.current.beginning_of_month : params[:date].to_date
     @last_day = @first_day.end_of_month
     one_month = [*@first_day..@last_day]
-    
     # ユーザーに紐づく一ヶ月分のレコードを検索し、取得する
     @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
-    
     unless one_month.count == @attendances.count
       ActiveRecord::Base.transaction do
         one_month.each { |day| @user.attendances.create!(worked_on: day) }

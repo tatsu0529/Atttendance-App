@@ -146,15 +146,10 @@
 						<% end %>
 					</td>
 					<td><%= day.note %></td>
-					<td><%= l(day.finish_time, format: :hour) if day.finish_time.present? %></td> 
+					<td><%= l(day.finish_time, format: :hour) if day.finish_time.present? %></td>
 					<td><%= l(day.finish_time.floor_to(15.minutes), format: :minute) if day.finish_time.present? %></td>
-					<td>
-						<% if day.finish_time.present? %>
-							<% overtime_hours = @user.designed_work_finish_time.to_f - day.finish_time.to_f  %>
-							<%= day.overtime_hours %>
-						<% end %>
-					</td>
 					<td></td>
+					<td><%= day.work_contents %></td>
 					<td></td>
 				</tr>
 			<% end %>

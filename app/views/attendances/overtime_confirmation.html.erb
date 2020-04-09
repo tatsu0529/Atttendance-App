@@ -20,15 +20,21 @@
           </thead>
           
           <% @attendance.each do |overtime| %>
+          <% css_class = case $days_of_the_week[overtime.worked_on.wday]
+  					when '土'
+  						'text-primary'
+  					when '日'
+  						'text-danger'
+  					end %>
           
           <tbody>
             <tr>
               <th><%= l(overtime.worked_on, format: :short) %></th>
+              <th class="<%= css_class %>"><%= $days_of_the_week[overtime.worked_on.wday]%></th>
+              <th><%= format_basic_info(overtime.finish_time) %></th>
               <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th><%= overtime.work_contents %></th>
+              <th><%= overtime.mark_of_instructor %></th>
               <th></th>
               <!--渡すパラメーターはそのUserの勤怠情報なので、〜path(@user)になるはず-->
               <th><%= link_to "確認", "#", class: "btn btn-primary" %></th>
