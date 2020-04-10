@@ -86,5 +86,3 @@ REQUEST_ERROR_MSG = "残業申請に失敗しました。やり直してくだ�
   end 
   
 end
-
-
