@@ -72,6 +72,7 @@ REQUEST_ERROR_MSG = "残業申請に失敗しました。やり直してくだ�
   
   # 残業確認モーダル表示
   def overtime_confirmation
+    @user = User.joins(:attendances).group("users.id").where.not(attendances: {finish_time: nil})
     @attendance = Attendance.where.not(finish_time: nil)
   end
   
