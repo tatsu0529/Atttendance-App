@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
     @user = User.find(params[:id])
   end
   
+  def set_attendance
+    @attendance = Attendance.find(params[:id])
+  end
+  
   def set_base
     @base = Base.find(params[:id])
   end
