@@ -101,8 +101,9 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     params.require(:attendance).permit(:finish_time, :work_contents, :mark_of_instructor)
   end 
   
+  # 残業申請への返信
   def reply_overtime_params
-    params.require(:user).permit(attendances: [:mark_of_instructor, :change])[:attendances]
+    params.permit(:mark_by_instructor)
   end 
   
 end

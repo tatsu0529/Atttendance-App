@@ -22,34 +22,34 @@
           </thead>
           
           <% @attendance.each do |overtime| %>
-          <% if overtime.user_id == user.id %>
-          <%= f.fields_for "attendances[]", overtime do |i| %>
-          <% css_class = case $days_of_the_week[overtime.worked_on.wday]
-  					when '土'
-  						'text-primary'
-  					when '日'
-  						'text-danger'
-  					end %>
-          
-          <tbody>
-            <tr>
-              <th><%= l(overtime.worked_on, format: :short) %></th>
-              <th class="<%= css_class %>"><%= $days_of_the_week[overtime.worked_on.wday]%></th>
-              <th><%= format_basic_info(overtime.finish_time) %></th>
-              <th><%= format_basic_info(user.designed_work_finish_time) %></th>
-              <th><%= overtime.work_contents %></th>
-              <th><%= i.select :mark_of_instructor, [["なし"],["申請中"],["承認"],["否認"]]%></th>
-              <th><%= i.check_box :change, id: "remember_me" %></th>
-              <th><%= link_to "確認", user_path(user), class: "btn btn-primary" %></th>
-            </tr>
-          </tbody>
-        <table class="center">
-          <%= i.submit"変更を送信する", class: "btn btn-lg btn-primary" %>
-        </table>
-      <% end %>
+            <% if overtime.user_id == user.id %>
+              <%= f.fields_for :attendances do |i| %>
+                <% css_class = case $days_of_the_week[overtime.worked_on.wday]
+        					when '土'
+        						'text-primary'
+        					when '日'
+        						'text-danger'
+        				end %>
+            
+                <tbody>
+                  <tr>
+                    <th><%= l(overtime.worked_on, format: :short) %></th>
+                    <th class="<%= css_class %>"><%= $days_of_the_week[overtime.worked_on.wday]%></th>
+                    <th><%= format_basic_info(overtime.finish_time) %></th>
+                    <th><%= format_basic_info(user.designed_work_finish_time) %></th>
+                    <th><%= overtime.work_contents %></th>
+                    <th><%= i.select :mark_by_instructor, [["なし"],["申請中"],["承認"],["否認"]]%></th>
+                    <th><%= i.check_box :change, id: "remember_me" %></th>
+                    <th><%= link_to "確認", user_path(user), class: "btn btn-primary" %></th>
+                  </tr>
+                </tbody>
+              <table class="center">
+                <%= i.submit"変更を送信する", class: "btn btn-lg btn-primary" %>
+              </table>
+             <% end %>
+           <% end %>
+         <% end %>
+       </table>
+      </div>
     <% end %>
-    <% end %>
-    </table>
-  </div>
-<% end %>
 <% end %>
