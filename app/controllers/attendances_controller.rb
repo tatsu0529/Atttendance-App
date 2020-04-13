@@ -64,7 +64,6 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     # @attendance = Attendance.find(params[:id])
     if @attendance.started_at.present?
       if @attendance.update_attributes(overtime_params)
-        byebug
         flash[:success] = "残業を申請しました。"
       else
         flash[:danger] = REQUEST_ERROR_MSG
@@ -105,6 +104,5 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 残業申請への返信
   def reply_overtime_params
     params.require(:user).permit(attendances:[:mark_by_instructor])[:attendances]
-  end 
-  
+  end
 end
