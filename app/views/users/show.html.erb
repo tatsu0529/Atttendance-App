@@ -150,7 +150,7 @@
 					<td><%= l(day.finish_time.floor_to(15.minutes), format: :minute) if day.finish_time.present? %></td>
 					<td></td>
 					<td><%= day.work_contents %></td>
-					<td></td>
+					<td><%= day.mark_by_instructor %></td>
 				</tr>
 			<% end %>
 		</tbody

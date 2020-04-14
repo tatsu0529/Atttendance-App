@@ -2,7 +2,7 @@ class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :overtime]
   before_action :set_attendance, only: :request_overtime
   before_action :logged_in_user, only: [:update, :edit_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :overtime]
+  before_action :set_one_month, only: [:edit_one_month, :overtime, :request_overtime]
 
 
 UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
@@ -61,7 +61,6 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 残業申請
   def request_overtime
-    # @attendance = Attendance.find(params[:id])
     if @attendance.started_at.present?
       if @attendance.update_attributes(overtime_params)
         flash[:success] = "残業を申請しました。"
@@ -80,12 +79,14 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 残業申請への返信
   def reply_overtime
-    @attendance = Attendance.where.not(finish_time: nil)
-      if @attendance.update_all(reply_overtime_params)
-        flash[:success] = "申請に返信しました。"
-      else
-        flash[:danger] = REPLY_ERROR_MSG
-      end
+    attendance = Attendance.where.not(finish_time: nil)
+      attendance.each do |overtime|
+        if overtime.update(reply_overtime_params)
+          flash[:success] = "申請に返信しました。"
+        else
+          flash[:danger] = REPLY_ERROR_MSG
+        end
+      end 
     redirect_to user_url(current_user)
   end 
   
@@ -103,6 +104,6 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 残業申請への返信
   def reply_overtime_params
-    params.require(:user).permit(attendances:[:mark_by_instructor])[:attendances]
+    params.require(:user).permit(attendances: :mark_by_instructor)[:attendances]
   end
 end
