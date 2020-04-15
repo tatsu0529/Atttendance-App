@@ -67,7 +67,12 @@
 	<% end %>
 	
 	<!--残業申請条件分岐-->
-	<% if @attendance.present? %>
+	<% @attendance.each do |i| %>
+	<% if i.finish_time.present? && i.mark_by_instructor.nil? %>
+		<% @link_to = 1 %>
+		<%  end %>
+	<% end %>
+	<% if @link_to == 1 %>
 		<p><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance) %>
 			 <%= "#{@overtime_sum}件の通知があります。" %>
 		</p>

@@ -21,8 +21,8 @@
             </tr>
           </thead>
           
-        <%= f.fields_for "attendances[]",@attendances do |i| %>
           <% @attendance.each do |overtime| %>
+          <%= f.fields_for 'attendances[]', overtime do |i| %>
             <% if overtime.user_id == user.id %>
                 <% css_class = case $days_of_the_week[overtime.worked_on.wday]
         					when '土'
@@ -45,10 +45,10 @@
                 </tbody>
                <% end %>
              <% end %>
-            <table class="center">
-              <%= i.submit"変更を送信する", class: "btn btn-lg btn-primary" %>
-            </table>
-         <% end %>
+           <% end %>
+          <table class="center">
+            <%= f.submit"変更を送信する", class: "btn btn-lg btn-primary" %>
+          </table>
        </table>
       </div>
     <% end %>
