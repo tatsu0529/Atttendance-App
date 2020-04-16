@@ -23,6 +23,7 @@ ja:
           started_at: 出勤時間
           finished_at: 退勤時間
           finish_time: 退勤予定時間
+          request_one_month: 勤怠申請
           note: 備考
           uid: ユーザーID
           work_contents: 業務内容

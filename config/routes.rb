@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       get 'attendances/overtime_confirmation'
       patch 'attendances/reply_overtime'
       patch 'attendances/request_one_month'
+      get 'attendances/attendance_confirmation'
+      patch 'attendances/reply_attendance'
     end
       resources :attendances do
       end

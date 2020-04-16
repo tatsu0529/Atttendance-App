@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20200226081911) do
     t.string "change"
     t.string "mark_by_instructor"
     t.string "request_one_month"
+    t.string "approval_by_boss"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_attendances_on_user_id"

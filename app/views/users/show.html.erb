@@ -1,4 +1,6 @@
-<%= provide(:title, @user.name) %>
+<% provide(:title, @user.name) %>
+<% provide(:button_text, '申請する')%>
+
 <div>
 	<table class="table table-bordered table-condensed user-table">
 		<% if current_user.admin? %>
@@ -53,8 +55,16 @@
 
 <div class="btn-users-show">
 	<!--所長承認のお知らせ条件分岐-->
-	<% if @attendance.present? %>
-		<p><%= link_to "【所長承認のお知らせ】" %></p>
+	<% if @attendance. request_one_month.present? %>
+		<% if @attendance.request_one_month == current_user.name %>
+			<% @link_to = 1 %>
+			<% @request_boss = @request_boss + 1 %>
+		 <% end %>	
+	<% end %>
+	<% if @link_to == 1 %>
+		<p><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance) %>
+			 <%= "#{@request_boss}件の通知があります。" %>
+		</p>
 		<% else %>
 			<p>【所長承認のお知らせ】</p>
 	<% end %>
@@ -87,8 +97,6 @@
 	<%= link_to "CSV出力", "#", class: "btn btn-primary btn-attendance" %><br/>
 	<%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary btn-attendance" %>
 </div>
-
-<%= form_with(model:@user, url: attendances_request_one_month_user_path(@attendances), local: true, method: :patch) do |f| %>
 
 <div>
 	<table class="table table-bordered table-condensed table-hover" id="table-attendances">
@@ -166,9 +174,13 @@
 					<td><%= day.work_contents %></td>
 					<td><%= day.mark_by_instructor %></td>
 				</tr>
-			<% end %>
-		</tbody
-			
+			<% end %>  
+		</tbody>
+		
+		
+		<%= form_with(model:@user, url: attendances_request_one_month_user_path(@attendances), local: true, method: :patch) do |f| %>
+			<%= f.fields_for 'attendances[]', @attendance do |one_month| %>
+
 			<tfoot>
 			<tr>
 				<!--rowspan:縦結合、colspan：横結合-->
@@ -178,13 +190,18 @@
 				<td><%= format("%.2f", @total_working_times.to_f) %></td>
 				<td colspan="5"></td>
 				<td>
-					<%= f.select :request_one_month, @instructor %>
+					<% if @attendance.approval_by_boss.nil? %>
+						<p>所長承認：未</p>
+					<% end %>
+					<p><%= one_month.select :request_one_month, @instructor %></p>
+						 <%= f.submit yield(:button_text),class: "btn btn-lg btn-primary" %>
 				</td>
 			</tr>
 		</tfoot>  
+		<% end %>
+		<% end %>
 	</table>
 </div>
-<% end %>
 
 <!--モーダル 表示-->
 <div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

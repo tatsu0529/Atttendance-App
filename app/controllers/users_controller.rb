@@ -26,6 +26,7 @@ class UsersController < ApplicationController
     @worked_sum = @attendances.where.not(started_at: nil).count
     @link_to = 0
     @overtime_sum = 0
+    @request_boss = 0
   end
   
   def new
