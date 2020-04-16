@@ -1,8 +1,9 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :overtime]
+  before_action :set_user, only: :edit_one_month
   before_action :set_attendance, only: :request_overtime
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :set_one_month, only: :edit_one_month
+  before_action :instructor
 
 UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 REQUEST_ERROR_MSG = "残業申請に失敗しました。やり直してください。"
@@ -73,7 +74,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 残業確認モーダル表示
   def overtime_confirmation
     @user = User.joins(:attendances).group("users.id").where.not(attendances: {finish_time: nil})
-    @attendance = Attendance.where.not(finish_time: nil)
+    @attendance = Attendance.where.not(finish_time: nil).where(mark_by_instructor: nil)
   end
   
   # 残業申請への返信
@@ -86,6 +87,15 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     end 
     redirect_to user_url(current_user)
   end 
+  
+  def request_one_month
+    attendance = Attendance.find(id)
+    if attendance.update(one_month_params)
+      flash[:success] = "1ヶ月分の勤怠を申請しました。"
+    end
+    redirect_to user_url(current_user)
+  end 
+    
   
   private
   
@@ -103,4 +113,9 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   def reply_overtime_params
     params.require(:user).permit(attendances: :mark_by_instructor)[:attendances]
   end
+  
+  # 1ヶ月分の勤怠申請
+  def one_month_params
+    params.require(:attendance).permit(:request_one_month)
+  end 
 end

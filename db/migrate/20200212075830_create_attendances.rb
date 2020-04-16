@@ -12,6 +12,8 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.datetime :overtime_hours
       t.string :change
       t.string :mark_by_instructor
+      t.string :request_one_month
+      
 
       t.timestamps
     end

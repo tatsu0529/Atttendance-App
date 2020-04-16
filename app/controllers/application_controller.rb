@@ -59,6 +59,10 @@ class ApplicationController < ActionController::Base
     @attendances = @user.attendances.where(worked_on)
   end 
   
+  def instructor
+    @instructor = User.pluck(:name)
+  end 
+  
 end
 
 

@@ -2,12 +2,11 @@
 <% provide(:button_text, '申請に返信する') %>
 
 <%= form_with(model: @user, url: attendances_reply_overtime_user_path(@attendance), local: true, method: :patch) do |f| %>
-
-<% @user.each do |user| %>
-  <h1><%="#{user.name}からの残業申請" %></h1>
-    <div class="modal-body">
+  <% @user.each do |user| %>
+    <h1><%="#{user.name}からの残業申請" %></h1>
+      <div class="modal-body">
         <table class="table table-bordered table-request-form-overtime">
-        
+          
           <thead>
             <tr>
               <th>日付</th>
@@ -20,67 +19,38 @@
               <th>勤怠を確認する</th>
             </tr>
           </thead>
-          
-          <% @attendance.each do |overtime| %>
-<<<<<<< HEAD
-          <% if overtime.user_id == user.id %>
-          <% css_class = case $days_of_the_week[overtime.worked_on.wday]
-  					when '土'
-  						'text-primary'
-  					when '日'
-  						'text-danger'
-  					end %>
-          
-          <tbody>
-            <tr>
-              <th><%= l(overtime.worked_on, format: :short) %></th>
-              <th class="<%= css_class %>"><%= $days_of_the_week[overtime.worked_on.wday]%></th>
-              <th><%= format_basic_info(overtime.finish_time) %></th>
-              <th><%= format_basic_info(user.designed_work_finish_time) %></th>
-              <th><%= overtime.work_contents %></th>
-              <th></th>
-              <th><%= check_box :"変更", id: "remember_me" %></th>
-              <th><%= link_to "確認", user_path(user), class: "btn btn-primary" %></th>
-            </tr>
-          </tbody>
-          
-          <% end %>
-          <% end %>
-      
-      <table class="center">
-      </table>
-    </table>
-  </div>
-=======
-          <%= f.fields_for 'attendances[]', overtime do |i| %>
-            <% if overtime.user_id == user.id %>
-                <% css_class = case $days_of_the_week[overtime.worked_on.wday]
-        					when '土'
-        						'text-primary'
-        					when '日'
-        						'text-danger'
-        				end %>
             
-                <tbody>
-                  <tr>
-                    <th><%= l(overtime.worked_on, format: :short) %></th>
-                    <th class="<%= css_class %>"><%= $days_of_the_week[overtime.worked_on.wday]%></th>
-                    <th><%= format_basic_info(overtime.finish_time) %></th>
-                    <th><%= format_basic_info(user.designed_work_finish_time) %></th>
-                    <th><%= overtime.work_contents %></th>
-                    <th><%= i.select :mark_by_instructor, [["なし"],["申請中"],["承認"],["否認"]] %></th>
-                    <th><%= i.check_box :change, id: "remember_me" %></th>
-                    <th><%= link_to "確認", user_path(user), class: "btn btn-primary" %></th>
-                  </tr>
-                </tbody>
+          <% @attendance.each do |overtime| %>
+            <%= f.fields_for 'attendances[]', overtime do |i| %>
+              <% if overtime.mark_of_instructor == current_user.name \
+                 && overtime.mark_by_instructor.nil? \
+                 && overtime.user_id == user.id %>
+                  <% css_class = case $days_of_the_week[overtime.worked_on.wday]
+          					when '土'
+          						'text-primary'
+          					when '日'
+          						'text-danger'
+          				end %>
+              
+                  <tbody>
+                    <tr>
+                      <th><%= l(overtime.worked_on, format: :short) %></th>
+                      <th class="<%= css_class %>"><%= $days_of_the_week[overtime.worked_on.wday]%></th>
+                      <th><%= format_basic_info(overtime.finish_time) %></th>
+                      <th><%= format_basic_info(user.designed_work_finish_time) %></th>
+                      <th><%= overtime.work_contents %></th>
+                      <th><%= i.select :mark_by_instructor, [["なし"],["申請中"],["承認"],["否認"]] %></th>
+                      <th><%= i.check_box :change, id: "remember_me" %></th>
+                      <th><%= link_to "確認", user_path(user), class: "btn btn-primary" %></th>
+                    </tr>
+                  </tbody>
+                 <% end %>
                <% end %>
              <% end %>
-           <% end %>
-          <table class="center">
-            <%= f.submit"変更を送信する", class: "btn btn-lg btn-primary" %>
-          </table>
-       </table>
-      </div>
+         </table>
+        </div>
     <% end %>
->>>>>>> reply-overtime
+  <table class="center">
+    <%= f.submit"変更を送信する", class: "btn btn-lg btn-primary" %>
+  </table>
 <% end %>
