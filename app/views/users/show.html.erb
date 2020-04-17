@@ -55,11 +55,13 @@
 
 <div class="btn-users-show">
 	<!--所長承認のお知らせ条件分岐-->
-	<% if @attendance. request_one_month.present? %>
-		<% if @attendance.request_one_month == current_user.name %>
-			<% @link_to = 1 %>
-			<% @request_boss = @request_boss + 1 %>
-		 <% end %>	
+	<% @all_attendances.each do |a| %>
+		<% if a.request_one_month.present? %>
+			<% if a.request_one_month == current_user.name %>
+				<% @link_to = 1 %>
+				<% @request_boss = @request_boss + 1 %>
+		 	<% end %>
+		<% end %>
 	<% end %>
 	<% if @link_to == 1 %>
 		<p><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance) %>

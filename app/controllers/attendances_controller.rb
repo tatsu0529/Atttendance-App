@@ -88,7 +88,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     redirect_to user_url(current_user)
   end 
   
-  # 1ヶ月分の申請
+  # 1ヶ月分の勤怠申請
   def request_one_month
     one_month_params.each do |id, request_one_month|
       attendance = Attendance.find(id)
@@ -99,9 +99,21 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     redirect_to user_url(current_user)
   end 
   
+  # 1ヶ月分の勤怠申請確認
   def attendance_confirmation
     @user = User.joins(:attendances).group("users.id").where.not(attendances: {request_one_month: nil})
-    @attendances = Attendance.where.not(request_one_month: nil)
+    @attendance = Attendance.where.not(request_one_month: nil).where(approval_by_boss: nil)
+  end 
+  
+  # 1ヶ月分の勤怠申請の返信
+  def reply_attendance
+    one_month_attendance_params.each do |id, reply_attendance|
+      attendance = Attendance.find(id)
+      if attendance.update(reply_attendance)
+        flash[:success] = "勤怠申請の返信をしました。"
+      end 
+    end
+    redirect_to user_url(current_user)
   end 
   
   private
@@ -123,6 +135,11 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月分の勤怠申請
   def one_month_params
-    params.require(:user).permit(attendances: :request_one_month)[:attendances]
+    params.require(:user).permit(attendances: :request_one_month)
   end 
+  
+  # 1ヶ月分の勤怠申請への返信
+  def one_month_attendance_params
+    params.permit(attendances: :approval_by_boss)[:attendances]
+  end
 end
