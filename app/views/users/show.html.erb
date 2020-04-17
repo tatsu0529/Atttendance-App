@@ -56,7 +56,7 @@
 <div class="btn-users-show">
 	<!--所長承認のお知らせ条件分岐-->
 	<% @all_attendances.each do |a| %>
-		<% if a.request_one_month.present? %>
+		<% if a.request_one_month.present? && a.approval_by_boss. nil?%>
 			<% if a.request_one_month == current_user.name %>
 				<% @link_to = 1 %>
 				<% @request_boss = @request_boss + 1 %>
@@ -133,6 +133,8 @@
 			</tr>
 		</thead>
 		
+		<%= form_with(model:@user, url: attendances_request_one_month_user_path(@attendances), local: true, method: :patch) do |f| %>
+		
 		<tbody>
 			<% @attendances.each do |day| %>
 			<% css_class = case $days_of_the_week[day.worked_on.wday]
@@ -180,7 +182,6 @@
 		</tbody>
 		
 		
-		<%= form_with(model:@user, url: attendances_request_one_month_user_path(@attendances), local: true, method: :patch) do |f| %>
 			<%= f.fields_for 'attendances[]', @attendance do |one_month| %>
 
 			<tfoot>

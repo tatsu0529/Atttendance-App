@@ -135,11 +135,11 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月分の勤怠申請
   def one_month_params
-    params.require(:user).permit(attendances: :request_one_month)
+    params.require(:user).permit(attendances: :request_one_month)[:attendances]
   end 
   
   # 1ヶ月分の勤怠申請への返信
   def one_month_attendance_params
-    params.permit(attendances: :approval_by_boss)[:attendances]
+    params.require(:user).permit(attendances: :approval_by_boss)[:attendances]
   end
 end

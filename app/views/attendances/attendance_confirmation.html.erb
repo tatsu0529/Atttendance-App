@@ -17,7 +17,7 @@
           </thead>
             
           <% @attendance.each do |attendance| %>
-            <%= fields_for 'attendances[]', attendance do |i|%>
+            <%= f.fields_for 'attendances[]', attendance do |i|%>
               <% if attendance.request_one_month == current_user.name \
                  && attendance.approval_by_boss.nil? \
                  && attendance.user_id == user.id %>
