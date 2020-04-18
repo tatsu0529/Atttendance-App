@@ -90,12 +90,12 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月分の勤怠申請
   def request_one_month
-    one_month_params.each do |id, request_one_month|
-      attendance = Attendance.find(id)
-      if attendance.update(request_one_month)
-        flash[:success] = "1ヶ月分の勤怠を申請しました。"
-      end 
-    end 
+    if Attendance.where(['user_id = ?', current_user.id])\
+                 .where(['worked_on >= ?', Date.current.beginning_of_month])\
+                 .where(['worked_on <= ?', Date.current.end_of_month])\
+                 .update_all(request_one_month: params[:user][:attendance][:request_one_month])
+      flash[:success] = "1ヶ月分の勤怠を申請しました。"
+    end
     redirect_to user_url(current_user)
   end 
   
@@ -136,7 +136,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 1ヶ月分の勤怠申請
   def one_month_params
     params.require(:user).permit(attendances: :request_one_month)[:attendances]
-  end 
+  end
   
   # 1ヶ月分の勤怠申請への返信
   def one_month_attendance_params
