@@ -24,7 +24,9 @@ class UsersController < ApplicationController
     @attendance = Attendance.find(params[:id])
     @all_attendances = Attendance.all
     @worked_sum = @attendances.where.not(started_at: nil).count
-    @link_to = 0
+    @link_to1 = 0
+    @link_to2 = 0
+    @link_to3 = 0
     @overtime_sum = 0
     @request_boss = 0
   end

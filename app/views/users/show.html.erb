@@ -58,12 +58,12 @@
 	<% @all_attendances.each do |a| %>
 		<% if a.request_one_month.present? && a.approval_by_boss. nil?%>
 			<% if a.request_one_month == current_user.name %>
-				<% @link_to = 1 %>
+				<% @link_to1 = 1 %>
 				<% @request_boss = @request_boss + 1 %>
 		 	<% end %>
 		<% end %>
 	<% end %>
-	<% if @link_to == 1 %>
+	<% if @link_to1 == 1 %>
 		<p><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance) %>
 			 <%= "#{@request_boss}件の通知があります。" %>
 		</p>
@@ -82,12 +82,12 @@
 	<% @all_attendances.each do |i| %>
 		<% if i.finish_time.present? && i.mark_by_instructor.nil? %>
 			<% if i.mark_of_instructor == current_user.name %>
-				<% @link_to = 1 %>
+				<% @link_to3 = 1 %>
 				<% @overtime_sum = @overtime_sum + 1 %>
 			 <% end %>	
 		<% end %>
 	<% end %>
-	<% if @link_to == 1 %>
+	<% if @link_to3 == 1 %>
 		<p><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance) %>
 			 <%= "#{@overtime_sum}件の通知があります。" %>
 		</p>
