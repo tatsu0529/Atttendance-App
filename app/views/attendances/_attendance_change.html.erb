@@ -3,7 +3,7 @@
 
 <%= form_with(model: @user, url: attendances_reply_change_user_path(@attendance), local: true, method: :patch) do |f| %>
   <% @user.each do |user| %>
-    <h1><%="#{user.name}からの残業申請" %></h1>
+    <h1><%="#{user.name}からの勤怠変更" %></h1>
       <div class="modal-body">
         <table class="table table-bordered table-request-form-overtime">
           
@@ -67,7 +67,7 @@
                       <th><%= change.note %></th>
                       <th><%= i.select :approve_change,[["申請中"],["承認"],["否認"]] %></th>
                       <th><%= i.check_box :change, id: "remember_me" %></th>
-                      <th><%= link_to "確認", user_path(user), class: "btn btn-primary" %></th>
+                      <th><%= link_to "確認", user_path(user), class: "btn btn-primary", :target=>["_blank"] %>/th>
                     </tr>
                   </tbody>
                  <% end %>

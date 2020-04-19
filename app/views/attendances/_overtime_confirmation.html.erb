@@ -41,7 +41,7 @@
                       <th><%= overtime.work_contents %></th>
                       <th><%= i.select :mark_by_instructor,[["申請中"],["承認"],["否認"]] %></th>
                       <th><%= i.check_box :change, id: "remember_me" %></th>
-                      <th><%= link_to "確認", user_path(user), class: "btn btn-primary" %></th>
+                      <th><%= link_to "確認", user_path(user), class: "btn btn-primary", :target=>["_blank"] %></th>
                     </tr>
                   </tbody>
                  <% end %>

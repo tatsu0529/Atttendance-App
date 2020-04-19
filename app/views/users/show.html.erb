@@ -53,61 +53,63 @@
 	</table>
 </div>
 
-<div class="btn-users-show">
-	<!--所長承認のお知らせ条件分岐-->
-	<% @all_attendances.each do |a| %>
-		<% if a.request_one_month.present? && a.approval_by_boss.nil?%>
-			<% if a.request_one_month == current_user.name %>
-				<% @link_to1 = 1 %>
-		 	<% end %>
+<% if @user == current_user %>
+	<div class="btn-users-show">
+		<!--所長承認のお知らせ条件分岐-->
+		<% @all_attendances.each do |a| %>
+			<% if a.request_one_month.present? && a.approval_by_boss.nil?%>
+				<% if a.request_one_month == current_user.name %>
+					<% @link_to1 = 1 %>
+			 	<% end %>
+			<% end %>
+		<% end%>
+		<% if @link_to1 == 1 %>
+			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance), remote: true %>
+				 <%= "#{@user_sum}件の通知があります。" %>
+			</p>
+		<% else %>
+			<p>【所長承認のお知らせ】</p>
 		<% end %>
-	<% end%>
-	<% if @link_to1 == 1 %>
-		<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance) %>
-			 <%= "#{@user_sum}件の通知があります。" %>
-		</p>
-	<% else %>
-		<p>【所長承認のお知らせ】</p>
-	<% end %>
-	
-	<!--勤怠変更申請のお知らせ条件分岐-->
-	<% @all_attendances.each do |c| %>
-		<% if c.request_for_change.present? && c.approve_change.nil? %>
-			<% if c.request_for_change == current_user.name %>
-				<% @link_to2 = 1 %>
-				<% @change_sum = @change_sum + 1 %>
+		
+		<!--勤怠変更申請のお知らせ条件分岐-->
+		<% @all_attendances.each do |c| %>
+			<% if c.request_for_change.present? && c.approve_change.nil? %>
+				<% if c.request_for_change == current_user.name %>
+					<% @link_to2 = 1 %>
+					<% @change_sum = @change_sum + 1 %>
+				<% end %>
 			<% end %>
 		<% end %>
-	<% end %>
-	<% if @link_to2 == 1 %>
-		<p class = "alart-for-boss"><%= link_to "【勤怠変更申請のお知らせ】",attendances_attendance_change_user_path(@attendance) %>
-		   <%= "#{@change_sum}件の通知があります。"%>
-		</p>
-	<% else %>
-		<p>【勤怠変更申請のお知らせ】</p>
-	<% end %>
-	
-	<!--残業申請条件分岐-->
-	<% @all_attendances.each do |i| %>
-		<% if i.finish_time.present? && i.mark_by_instructor.nil? %>
-			<% if i.mark_of_instructor == current_user.name %>
-				<% @link_to3 = 1 %>
-				<% @overtime_sum = @overtime_sum + 1 %>
-			 <% end %>	
+		<% if @link_to2 == 1 %>
+			<p class = "alart-for-boss"><%= link_to "【勤怠変更申請のお知らせ】",attendances_attendance_change_user_path(@attendance), remote: true %>
+			   <%= "#{@change_sum}件の通知があります。"%>
+			</p>
+		<% else %>
+			<p>【勤怠変更申請のお知らせ】</p>
 		<% end %>
-	<% end %>
-	<% if @link_to3 == 1 %>
-		<p class = "alart-for-boss"><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance) %>
-			 <%= "#{@overtime_sum}件の通知があります。" %>
-		</p>
-	<% else %>
-		<p>【残業申請のお知らせ】</p>
-	<% end %>
-  
-	<%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary btn-attendance" %>
-	<%= link_to "CSV出力", "#", class: "btn btn-primary btn-attendance" %><br/>
-	<%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary btn-attendance" %>
-</div>
+		
+		<!--残業申請条件分岐-->
+		<% @all_attendances.each do |i| %>
+			<% if i.finish_time.present? && i.mark_by_instructor.nil? %>
+				<% if i.mark_of_instructor == current_user.name %>
+					<% @link_to3 = 1 %>
+					<% @overtime_sum = @overtime_sum + 1 %>
+				 <% end %>	
+			<% end %>
+		<% end %>
+		<% if @link_to3 == 1 %>
+			<p class = "alart-for-boss"><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance), remote: true %>
+				 <%= "#{@overtime_sum}件の通知があります。" %>
+			</p>
+		<% else %>
+			<p>【残業申請のお知らせ】</p>
+		<% end %>
+	  
+		<%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary btn-attendance" %>
+		<%= link_to "CSV出力", "#", class: "btn btn-primary btn-attendance" %><br/>
+		<%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary btn-attendance" %>
+	</div>
+<% end %>
 
 <%= form_with(model:@user, url: attendances_request_one_month_user_path(@attendances), local: true, method: :patch) do |f| %>
 	<div>
@@ -153,7 +155,11 @@
 							'text-danger'
 						end %>
 					<tr>
-						<td><%= link_to "残業申請", attendances_overtime_user_path(@user, date: day.worked_on), remote: true, class: "btn btn-primary" %></td>
+						<td>
+							<% if @user == current_user %>
+								<%= link_to "残業申請", attendances_overtime_user_path(@user, date: day.worked_on), remote: true, class: "btn btn-primary" %>
+							<% end %>
+						</td>
 						<td><%= l(day.worked_on, format: :short) %></td>
 						<td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday]%></td>
 						<td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
@@ -209,13 +215,15 @@
 					<td><%= format("%.2f", @total_working_times.to_f) %></td>
 					<td colspan="5"></td>
 					<td>
-						<% if @attendance.approval_by_boss.nil? %>
-							<p>所長承認：未</p>
-						<% elsif @attendance.approval_by_boss.present? %>
-							<p>所長承認済み</p>
+						<% if @user == current_user %>
+							<% if @attendance.approval_by_boss.nil? %>
+								<p>所長承認：未</p>
+							<% elsif @attendance.approval_by_boss.present? %>
+								<p>所長承認済み</p>
+							<% end %>
+							<p><%= one_month.select :request_one_month, @instructor %></p>
+								 <%= f.submit yield(:button_text),class: "btn btn-lg btn-primary" %>
 						<% end %>
-						<p><%= one_month.select :request_one_month, @instructor %></p>
-							 <%= f.submit yield(:button_text),class: "btn btn-lg btn-primary" %>
 					</td>
 				</tr>
 			</tfoot>  
@@ -227,3 +235,6 @@
 <!--モーダル 表示-->
 <div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>		
 <div id="overtime_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="attendance_change" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="attendance_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
