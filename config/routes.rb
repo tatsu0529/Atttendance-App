@@ -24,6 +24,8 @@ Rails.application.routes.draw do
       patch 'attendances/request_one_month'
       get 'attendances/attendance_confirmation'
       patch 'attendances/reply_attendance'
+      get 'attendances/attendance_change'
+      patch 'attendances/reply_change'
     end
       resources :attendances do
       end

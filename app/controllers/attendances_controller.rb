@@ -116,11 +116,27 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     redirect_to user_url(current_user)
   end 
   
+  # 勤怠変更の確認
+  def attendance_change
+    @user = User.joins(:attendances).group("users.id").where.not(attendances: {request_for_change: nil})
+    @attendance = Attendance.where.not(request_for_change: nil)
+  end 
+  
+  def reply_change
+    reply_change_params.each do |id, attendance_change|
+      attendance = Attendance.find(id)
+      if attendance.update(attendance_change)
+        flash[:success] = "申請に返信しました。"
+      end
+    end 
+    redirect_to user_url(current_user)
+  end 
+    
   private
   
   # 1ヶ月の勤怠更新時
   def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :request_for_change])[:attendances]
   end
   
   # 残業申請時
@@ -132,4 +148,10 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   def reply_overtime_params
     params.require(:user).permit(attendances: :mark_by_instructor)[:attendances]
   end
+  
+  # 勤怠変更への返信
+  def reply_change_params
+    params.require(:user).permit(attendances: :approve_change)[:attendances]
+  end 
+  
 end

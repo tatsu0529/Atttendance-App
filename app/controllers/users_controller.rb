@@ -21,14 +21,16 @@ class UsersController < ApplicationController
   end
   
   def show
+    @all_users = User.all
     @attendance = Attendance.find(params[:id])
     @all_attendances = Attendance.all
     @worked_sum = @attendances.where.not(started_at: nil).count
+    @user_sum = User.joins(:attendances).group("users.id").where.not(attendances: {request_one_month: nil})
     @link_to1 = 0
     @link_to2 = 0
     @link_to3 = 0
     @overtime_sum = 0
-    @request_boss = 0
+    @change_sum = 0
   end
   
   def new

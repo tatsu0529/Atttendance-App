@@ -14,7 +14,8 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.string :mark_by_instructor
       t.string :request_one_month
       t.string :approval_by_boss
-
+      t.string :request_for_change
+      t.string :approve_change
       t.timestamps
     end
   end
