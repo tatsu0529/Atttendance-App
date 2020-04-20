@@ -16,6 +16,8 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.string :approval_by_boss
       t.string :request_for_change
       t.string :approve_change
+      t.datetime :latest_started_at
+      t.datetime :latest_finished_at
       t.timestamps
     end
   end

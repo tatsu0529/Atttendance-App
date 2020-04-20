@@ -3,7 +3,7 @@ class AttendancesController < ApplicationController
   before_action :set_attendance, only: :request_overtime
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :set_one_month, only: :edit_one_month
-  before_action :instructor
+  before_action :users
 
 UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 REQUEST_ERROR_MSG = "残業申請に失敗しました。やり直してください。"
@@ -91,9 +91,8 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 1ヶ月分の勤怠申請
   def request_one_month
     if Attendance.where(['user_id = ?', current_user.id])\
-                 .where(['worked_on >= ?', Date.current.beginning_of_month])\
-                 .where(['worked_on <= ?', Date.current.end_of_month])\
-                 .update_all(request_one_month: params[:user][:attendance][:request_one_month])
+                 .where(['worked_on = ?', Date.current.end_of_month])\
+                 .update(request_one_month: params[:user][:attendance][:request_one_month])
       flash[:success] = "1ヶ月分の勤怠を申請しました。"
     end
     redirect_to user_url(current_user)
@@ -102,16 +101,16 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 1ヶ月分の勤怠申請確認
   def attendance_confirmation
     @user = User.joins(:attendances).group("users.id").where.not(attendances: {request_one_month: nil})
-    @attendance = Attendance.find(params[:id])
+    @attendance = Attendance.where.not(request_one_month: nil).where(approval_by_boss: nil)
   end 
   
   # 1ヶ月分の勤怠申請の返信
   def reply_attendance
-    if Attendance.where(['user_id = ?', current_user.id])\
-                 .where(['worked_on >= ?', Date.current.beginning_of_month])\
-                 .where(['worked_on <= ?', Date.current.end_of_month])\
-                 .update_all(approval_by_boss: params[:user][:attendance][:approval_by_boss])
+    one_month_params.each do |id, one_month_attendance|
+      attendance = Attendance.find(id)
+      if attendance.update(one_month_attendance)
       flash[:success] = "勤怠申請の返信をしました。"
+      end 
     end 
     redirect_to user_url(current_user)
   end 
@@ -136,7 +135,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月の勤怠更新時
   def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :request_for_change])[:attendances]
+    params.require(:user).permit(attendances: [:latest_started_at, :latest_finished_at, :note, :request_for_change])[:attendances]
   end
   
   # 残業申請時
@@ -154,4 +153,8 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     params.require(:user).permit(attendances: :approve_change)[:attendances]
   end 
   
+  # 1ヶ月分の勤怠への返信
+  def one_month_params
+    params.require(:user).permit(attendances: :approval_by_boss)[:attendances]
+  end 
 end

@@ -39,7 +39,7 @@
                   <th><%= f.time_field :finish_time, class: "form-control" %></th>
                   <th><%= f.check_box :tomorrow, id: "remember_me" %></th>
                   <th><%= f.text_field :work_contents, class: "form-control" %></th>
-                  <th><%= f.select :mark_of_instructor, @instructor %></th>
+                  <th><%= f.collection_select(:mark_of_instructor, @users, :name, :name )%></th>
                 </tr>
               </tbody>
           

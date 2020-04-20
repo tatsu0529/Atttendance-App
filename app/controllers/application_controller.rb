@@ -59,10 +59,7 @@ class ApplicationController < ActionController::Base
     @attendances = @user.attendances.where(worked_on)
   end 
   
-  def instructor
-    @instructor = User.pluck(:name)
-  end 
-  
+  def users
+    @users = User.where(affiliation: "上長").where.not(id: current_user)
+  end
 end
-
-

@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :admin_user, only: [:destroy, :edit, :edit_basic_info, :update_basic_info]
   before_action :correct_user, only: [:edit, :update]
   before_action :set_one_month, only: :show
-  before_action :instructor
+  before_action :users
   
   def index
     @users = User.paginate(page: params[:page], per_page: 20)
@@ -31,6 +31,7 @@ class UsersController < ApplicationController
     @link_to3 = 0
     @overtime_sum = 0
     @change_sum = 0
+    @attendance_sum = 0
   end
   
   def new

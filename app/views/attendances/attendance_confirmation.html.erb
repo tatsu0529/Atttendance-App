@@ -16,19 +16,21 @@
             </tr>
           </thead>
             
-          <%= f.fields_for @attendance do |i|%>
-            <% if @attendance.request_one_month == current_user.name \
-               && @attendance.approval_by_boss.nil? \
-               && @attendance.user_id == user.id %>
-            
-              <tbody>
-                <tr>
-                  <th><%= l(@attendance.worked_on, format: :month) %></th>
-                  <th><%= i.select :approval_by_boss, [["申請中"],["承認"],["否認"]] %></th>
-                  <th><%= i.check_box :change, id: "remember_me" %></th>
-                  <th><%= link_to "確認", user_path(user), class: "btn btn-primary", :target=>["_blank"] %></th>
-                </tr>
-              </tbody>
+          <% @attendance.each do |attendance|%>
+            <%= f.fields_for 'attendances[]', attendance do |i|%>
+              <% if attendance.request_one_month == current_user.name \
+                 && attendance.approval_by_boss.nil? \
+                 && attendance.user_id == user.id %>
+              
+                <tbody>
+                  <tr>
+                    <th><%= l(attendance.worked_on, format: :month) %></th>
+                    <th><%= i.select :approval_by_boss, [["申請中"],["承認"],["否認"]] %></th>
+                    <th><%= i.check_box :change, id: "remember_me" %></th>
+                    <th><%= link_to "確認", user_path(user), class: "btn btn-primary", :target=>["_blank"] %></th>
+                  </tr>
+                </tbody>
+               <% end %>
              <% end %>
            <% end %>
          </table>
