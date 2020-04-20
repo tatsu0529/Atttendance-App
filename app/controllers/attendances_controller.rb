@@ -71,7 +71,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     redirect_to user_url(current_user)
   end 
   
-  # 残業確認モーダル表示
+  # 残業確認
   def overtime_confirmation
     @user = User.joins(:attendances).group("users.id").where.not(attendances: {finish_time: nil})
     @attendance = Attendance.where.not(finish_time: nil).where(mark_by_instructor: nil)
@@ -129,6 +129,10 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
       end
     end 
     redirect_to user_url(current_user)
+  end 
+  
+  def confirm_log_change
+    @attendance = current_user.attendances.find_by(worked_on: params[:date])
   end 
     
   private

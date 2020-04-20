@@ -108,7 +108,7 @@
 	  
 		<%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary btn-attendance" %>
 		<%= link_to "CSV出力", "#", class: "btn btn-primary btn-attendance" %><br/>
-		<%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-primary btn-attendance" %>
+		<%= link_to "勤怠修正ログ（承認済み）", attendances_confirm_log_change_user_path(@user), class: "btn btn-primary btn-attendance" %>
 	</div>
 <% end %>
 
@@ -166,32 +166,38 @@
 						
 						<% if day.latest_started_at.present? %>
 							<td><%= l(day.latest_started_at, format: :hour) %></td>
-							<td><%= l(day.latest_started_at.floor_to(15.minutes), tomat: :minute) %></td>
-						<% elsif day.started_at.present? %>
-							<td><%= l(day.started_at, format: :hour) %></td>
-							<td><%= l(day.started_at.floor_to(15.minutes), format: :minute) %></td>
+							<td><%= l(day.latest_started_at.floor_to(15.minutes), format: :minute) %></td>
+						<% else %>
+							<td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
+							<td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
+						<% end %>
 							<td>
 								<% if (Date.current == day.worked_on) && day.started_at.nil?  %>
 									<%= link_to "出勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
 								<% end %>
 							</td>
-						<% end %>
 						
 						<% if day.latest_finished_at.present? %>
 							<td><%= l(day.latest_finished_at, format: :hour) %></td>
-							<td><%= l(day.latestfinished_at.floor_to(15.minutes), format: :minute) %></td>
-						<% elsif day.finished_at.present? %>
-							<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? %></td>
-							<td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? %></td>
+							<td><%= l(day.latest_finished_at.floor_to(15.minutes), format: :minute) %></td>
+						<% else %>
+							<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
+							<td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
+						<% end %>
 							<td>
 								<% if (Date.current == day.worked_on) && day.finished_at.nil? && day.started_at.present? %>
 									<%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
 								<% end %>
 							</td>
-						<% end %>
 						<td>
-							<% if day.started_at.present? && day.finished_at.present? %>
+							<% if day.started_at.present? && day.finished_at.present?\
+								 && day.latest_started_at.nil? && day.latest_finished_at. nil? %>
 								<%= str_times = working_times(day.started_at, day.finished_at) %>
+								<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+								
+							<% elsif day.started_at.present? && day.finished_at.present?\
+								 && day.latest_started_at.present? && day.latest_finished_at. present? %>
+								<%= str_times = working_times(day.latest_started_at, day.latest_finished_at) %>
 								<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 							<% end %>
 						</td>
@@ -199,8 +205,10 @@
 						<td><%= l(day.finish_time, format: :hour) if day.finish_time.present? %></td>
 						<td><%= l(day.finish_time.floor_to(15.minutes), format: :minute) if day.finish_time.present? %></td>
 						<td>
-							<% if day.finished_at.present? %>
-								<%= over_times = over_working_times(@user.designed_work_finish_time, day.finished_at) %>
+							<% if day.finished_at.present? && day.latest_finished_at.nil? %>
+								<%= str_times = over_working_times(@user.designed_work_finish_time, day.finished_at) %>
+							<% elsif day.finished_at. present? && day.latest_finished_at. present? %>
+								<%= str_times = over_working_times(@user.designed_work_finish_time, day.latest_finished_at) %>
 							<% end %>
 						</td>
 						<td><%= day.work_contents %></td>

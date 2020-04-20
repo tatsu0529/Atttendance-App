@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       patch 'attendances/reply_attendance'
       get 'attendances/attendance_change'
       patch 'attendances/reply_change'
+      get 'attendances/confirm_log_change'
     end
       resources :attendances do
       end
