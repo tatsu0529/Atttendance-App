@@ -61,13 +61,9 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 残業申請
   def request_overtime
-    if @attendance.started_at.present?
       if @attendance.update_attributes(overtime_params)
         flash[:success] = "残業を申請しました。"
-      else
-        flash[:danger] = REQUEST_ERROR_MSG
       end 
-    end
     redirect_to user_url(current_user)
   end 
   
@@ -132,7 +128,8 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   end 
   
   def confirm_log_change
-    @attendance = current_user.attendances.find_by(worked_on: params[:date])
+    @user = User.find(params[:id])
+    @attendances = @user.attendances.where(params[:id])
   end 
     
   private

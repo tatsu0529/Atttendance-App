@@ -2,7 +2,7 @@
 
 <h1>勤怠ログ</h1>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover table-log">
   <thead>
   <tr>
     <th>リセット</th>
@@ -27,22 +27,19 @@
     <th>指示者</th>
     <th>承認日</th>
   </tr>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  
+  <% @attendances.each do |change_log| %>
+    <% if change_log.approve_change.present? %>
+      <tr>
+        <th><%= l(change_log.worked_on, format: :right) %></th>
+        <th><%= l(change_log.started_at, format: :feather) if change_log.started_at.present? %></th>
+        <th><%= l(change_log.finished_at, format: :feather) if change_log.finished_at.present?%></th>
+        <th><%= l(change_log.latest_started_at, format: :feather) if change_log.latest_started_at.present?%></th>
+        <th><%= l(change_log.latest_finished_at, format: :feather) if change_log.latest_finished_at.present?%></th>
+        <th><%= change_log.request_for_change %></th>
+        <th><%= l(change_log.updated_at, format: :light) %></th>
+      </tr>
+    <% end %>
+  <% end %>
+  
 </table>

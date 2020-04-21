@@ -55,14 +55,14 @@
                       <th><%= l(change.worked_on, format: :short) %></th>
                       <th class="<%= css_class %>"><%= $days_of_the_week[change.worked_on.wday]%></th>
                       
-                      <th><%= l(user.designed_work_start_time, format: :hour) %></th>
-                      <th><%= l(user.designed_work_start_time, format: :minute) %></th>
-                      <th><%= l(user.designed_work_finish_time, format: :hour) %></th>
-                      <th><%= l(user.designed_work_finish_time, format: :minute) %></th>
-                      <th><%= l(change.started_at, format: :hour) %></th>
-                      <th><%= l(change.started_at.floor_to(15.minutes),format: :minute) %></th>
-                      <th><%= l(change.finished_at, format: :hour) %></th>
-                      <th><%= l(change.finished_at.floor_to(15.minutes), format: :minute) %></th>
+                      <th><%= l(change.started_at, format: :hour) if change.started_at.present? %></th>
+                      <th><%= l(change.started_at.floor_to(15.minutes),format: :minute) if change.started_at.present? %></th>
+                      <th><%= l(change.finished_at, format: :hour) if change.finished_at.present?%></th>
+                      <th><%= l(change.finished_at.floor_to(15.minutes), format: :minute)if change.finished_at.present? %></th>
+                      <th><%= l(change.latest_started_at, format: :hour) if change.latest_started_at.present?%></th>
+                      <th><%= l(change.latest_started_at.floor_to(15.minutes),format: :minute) if change.latest_started_at.present?%></th>
+                      <th><%= l(change.latest_finished_at, format: :hour) if change.latest_finished_at.present?%></th>
+                      <th><%= l(change.latest_finished_at.floor_to(15.minutes), format: :minute) if change.latest_finished_at.present?%></th>
                       
                       <th><%= change.note %></th>
                       <th><%= i.select :approve_change,[["申請中"],["承認"],["否認"]] %></th>

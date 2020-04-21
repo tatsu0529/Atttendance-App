@@ -213,10 +213,15 @@
 						</td>
 						<td><%= day.work_contents %></td>
 						<td>
-							<% if day.mark_by_instructor.present? %>
+							<% if day.mark_of_instructor.present? && day.mark_by_instructor.nil? %>
 								<p>
-									【<%= day.mark_of_instructor %>】
-									 <%= "残業#{day.mark_by_instructor}" %>
+									【<%= day.mark_of_instructor %>:
+									 <%= "残業申請中" %>】
+								</p>
+							<% elsif day.mark_of_instructor.present? && day.mark_by_instructor.present? %>
+								<p>
+									【<%= day.mark_of_instructor %>:
+									 <%= "残業#{day.mark_by_instructor}" %>】
 								</p>
 							<% end %>
 							<% if day.approve_change.present? %>
@@ -225,6 +230,7 @@
 									<%= "勤怠編集#{day.approve_change}" %>
 							<% end %>
 						</td>
+						
 					</tr>
 				<% end %>  
 			</tbody>
@@ -261,5 +267,4 @@
 <!--モーダル 表示-->
 <div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>		
 <div id="overtime_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<div id="attendance_change" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="attendance_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

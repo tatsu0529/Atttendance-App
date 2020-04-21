@@ -40,9 +40,11 @@ ja:
     formats:
       default: "%Y/%m/%d"
       long: "%Y年%m月%d日(%a)"
+      right: "%Y-%m-%d"
       middle: "%Y年%m月"
       short: "%-m/%-d"
       month: "%-m月"
+      a: "%H:%M"
     month_names:
     - 
     - 1月
@@ -204,9 +206,9 @@ ja:
     formats:
       default: "%Y年%m月%d日(%a) %H時%M分%S秒 %z"
       long: "%Y/%m/%d %H:%M"
-      short: "%m/%d %H:%M"
+      light: "%Y-%m-%d"
+      feather: "%H:%M"
       hour: "%H"
       minute: "%M"
+      
     pm: 午後
-    finish_time: 終了予定時間
-    work_contents: 業務内容

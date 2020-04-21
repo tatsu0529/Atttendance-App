@@ -15,6 +15,11 @@ ja:
           password_confirmation: パスワード再入力
           created_at: 作成日
           updated_at: 更新日
+          designed_work_start_time: 指定勤務始業時間
+          designed_work_finish_time: 指定勤務終業時間
+          uid: ユーザーID
+          employee_number: 従業員番号
+          affiliation: 所属
         attendance:
           worked_on: 日付
           day: 曜日
@@ -25,5 +30,4 @@ ja:
           finish_time: 退勤予定時間
           request_one_month: 勤怠申請
           note: 備考
-          uid: ユーザーID
           work_contents: 業務内容
