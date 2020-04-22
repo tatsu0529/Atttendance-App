@@ -105,10 +105,6 @@
 		<% else %>
 			<p>【残業申請のお知らせ】</p>
 		<% end %>
-	  
-		<%= link_to "勤怠を変更", attendances_edit_one_month_user_path, class: "btn btn-primary btn-attendance" %>
-		<%= link_to "CSV出力", "#", class: "btn btn-primary btn-attendance" %><br/>
-		<%= link_to "勤怠修正ログ（承認済み）", attendances_confirm_log_change_user_path(@user), class: "btn btn-primary btn-attendance" %>
 	</div>
 <% end %>
 
@@ -149,6 +145,14 @@
 			
 			<tbody>
 				<% @attendances.each do |day| %>
+				<% @month = day %>
+				<% if @user == current_user %>
+					<% if day.worked_on == day.worked_on.beginning_of_month %>
+						<%= link_to "勤怠を変更", attendances_edit_one_month_user_path(@user, date: day.worked_on), class: "btn btn-primary btn-attendance" %>
+						<%= link_to "CSV出力", "#", class: "btn btn-primary btn-attendance" %><br/>
+						<%= link_to "勤怠修正ログ（承認済み）", attendances_confirm_log_change_user_path(@user), class: "btn btn-primary btn-attendance" %>
+					<% end %>
+				<% end %>
 				<% css_class = case $days_of_the_week[day.worked_on.wday]
 						when '土'
 							'text-primary'
@@ -207,7 +211,7 @@
 						<td>
 							<% if day.finished_at.present? && day.latest_finished_at.nil? %>
 								<%= str_times = over_working_times(@user.designed_work_finish_time, day.finished_at) %>
-							<% elsif day.finished_at. present? && day.latest_finished_at. present? %>
+							<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
 								<%= str_times = over_working_times(@user.designed_work_finish_time, day.latest_finished_at) %>
 							<% end %>
 						</td>
@@ -224,14 +228,46 @@
 									 <%= "残業#{day.mark_by_instructor}" %>】
 								</p>
 							<% end %>
-							<% if day.approve_change.present? %>
+							<% if day.request_for_change.present? && day.approve_change.nil? %>
 								<p>
-									【<%= day.request_for_change %>】
-									<%= "勤怠編集#{day.approve_change}" %>
+									【<%= day.request_for_change %>:
+									 <%= "勤怠変更申請中" %>】
+								</p>
+							<% elsif day.request_for_change.present? && day.approve_change.present? %>
+								<p>
+									【<%= day.request_for_change %>
+									<%= "勤怠編集#{day.approve_change}" %>】
 							<% end %>
 						</td>
-						
 					</tr>
+					<% if @user == current_user %>
+						<% if day.worked_on == day.worked_on.beginning_of_month %>
+							<%= f.fields_for @attendance do |one_month| %>
+	
+							<tfoot>
+								<tr>
+									<!--rowspan:縦結合、colspan：横結合-->
+									<td></td>
+									<td colspan="2"></td>
+									<td colspan="6"></td>
+									<td><%= format("%.2f", @total_working_times.to_f) %></td>
+									<td colspan="5"></td>
+									<td>
+										<% if @user == current_user %>
+											<% if @attendance.approval_by_boss.nil? %>
+												<p>所長承認：未</p>
+											<% elsif @attendance.approval_by_boss.present? %>
+												<p>所長承認済み</p>
+											<% end %>
+											<p><%= one_month.collection_select(:request_one_month, @users, :name, :name)%></p>
+												 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
+										<% end %>
+									</td>
+								</tr>
+							</tfoot>  
+						<% end %>
+					<% end %>
+				<% end %>
 				<% end %>  
 			</tbody>
 			

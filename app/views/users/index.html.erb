@@ -9,7 +9,7 @@
   <% end %>
     <%= will_paginate @users, previous_label: '&lt 前へ', next_label: '次へ &gt' %>
     
-  <table class="table table-condensed table-hover" id="table-users">
+  <table class="table table-condensed" id="table-users">
     <p>Example</p>
     <% @users.each do |user| %>
       <tr>

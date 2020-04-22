@@ -35,9 +35,28 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless current_user.admin?
   end
   
+  def month
+    @month = Date.current
+  end 
+  
+  def one_month
+    @month = current_user.attendances.find_by(worked_on: params[:date])
+    @first_day = @month.worked_on.beginning_of_month
+    @last_day = @first_day.end_of_month
+    one_month = [*@first_day..@last_day]
+    # ユーザーに紐づく一ヶ月分のレコードを検索し、取得する
+    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    unless one_month.count == @attendances.count
+      ActiveRecord::Base.transaction do
+        one_month.each { |day| @user.attendances.create!(worked_on: day) }
+      end
+      @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    end
+  end 
+  
   def set_one_month
     @first_day = params[:date].nil? ?
-    Date.current.beginning_of_month : params[:date].to_date
+    @month.beginning_of_month : params[:date].to_date
     @last_day = @first_day.end_of_month
     one_month = [*@first_day..@last_day]
     # ユーザーに紐づく一ヶ月分のレコードを検索し、取得する
