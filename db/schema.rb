@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20200226081911) do
     t.string "approve_change"
     t.datetime "latest_started_at"
     t.datetime "latest_finished_at"
+    t.datetime "start_on"
+    t.datetime "end_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_attendances_on_user_id"
@@ -51,10 +53,10 @@ ActiveRecord::Schema.define(version: 20200226081911) do
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
-    t.datetime "basic_time", default: "2020-04-20 23:00:00"
-    t.datetime "work_time", default: "2020-04-20 22:30:00"
-    t.datetime "designed_work_start_time", default: "2020-04-21 00:00:00"
-    t.datetime "designed_work_finish_time", default: "2020-04-21 09:00:00"
+    t.datetime "basic_time", default: "2020-04-22 23:00:00"
+    t.datetime "work_time", default: "2020-04-22 22:30:00"
+    t.datetime "designed_work_start_time", default: "2020-04-23 00:00:00"
+    t.datetime "designed_work_finish_time", default: "2020-04-23 09:00:00"
     t.string "affiliation"
     t.string "department"
     t.integer "employee_number"

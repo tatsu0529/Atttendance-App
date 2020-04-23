@@ -1,0 +1,92 @@
+<% provide(:class_text, 'attendance_change') %>
+<% provide(:button_text, '変更に送信する') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="modal-title">【勤怠変更】</h1>
+        <%= form_with(model: @user, url: attendances_reply_change_user_path(@attendance), local: true, method: :patch) do |f| %>
+          <% @user.each do |user| %>
+            <h3><%="#{user.name}からの勤怠変更" %></h3>
+              <div class="modal-body">
+                <table class="table table-bordered table-request-form-overtime">
+                  
+                  <thead>
+                    <tr>
+                      <th rowspan="3">日付</th>
+                      <th rowspan="3">曜日</th>
+                      <th colspan="4">変更前</th>
+                      <th colspan="4">変更後</th>
+                      <th rowspan="3">備考</th>
+                      <th rowspan="3">指示者確認㊞</th>
+                      <th rowspan="3">変更</th>
+                      <th rowspan="3">勤怠を確認する</th>
+                    </tr>
+                    
+                    <tr>
+                      <th colspan="2">出社</th>
+                      <th colspan="2">退社</th>
+                      <th colspan="2">出社</th>
+                      <th colspan="2">退社</th>
+                    </tr>
+                    
+                    <tr>
+                      <th>時</th>
+                      <th>分</th>
+                      <th>時</th>
+                      <th>分</th>
+                      <th>時</th>
+                      <th>分</th>
+                      <th>時</th>
+                      <th>分</th>
+                    </tr>
+                  </thead>
+                    
+                  <% @attendance.each do |change| %>
+                    <%= f.fields_for 'attendances[]', change do |i| %>
+                      <% if change.request_for_change == current_user.name \
+                         && change.approve_change.nil? \
+                         && change.user_id == user.id %>
+                          <% css_class = case $days_of_the_week[change.worked_on.wday]
+                  					when '土'
+                  						'text-primary'
+                  					when '日'
+                  						'text-danger'
+                  				end %>
+                      
+                          <tbody>
+                            <tr>
+                              <th><%= l(change.worked_on, format: :short) %></th>
+                              <th class="<%= css_class %>"><%= $days_of_the_week[change.worked_on.wday]%></th>
+                              
+                              <th><%= l(change.started_at, format: :hour) if change.started_at.present? %></th>
+                              <th><%= l(change.started_at.floor_to(15.minutes),format: :minute) if change.started_at.present? %></th>
+                              <th><%= l(change.finished_at, format: :hour) if change.finished_at.present?%></th>
+                              <th><%= l(change.finished_at.floor_to(15.minutes), format: :minute)if change.finished_at.present? %></th>
+                              <th><%= l(change.latest_started_at, format: :hour) if change.latest_started_at.present?%></th>
+                              <th><%= l(change.latest_started_at.floor_to(15.minutes),format: :minute) if change.latest_started_at.present?%></th>
+                              <th><%= l(change.latest_finished_at, format: :hour) if change.latest_finished_at.present?%></th>
+                              <th><%= l(change.latest_finished_at.floor_to(15.minutes), format: :minute) if change.latest_finished_at.present?%></th>
+                              
+                              <th><%= change.note %></th>
+                              <th><%= i.select :approve_change,[["申請中"],["承認"],["否認"]] %></th>
+                              <th><%= i.check_box :change, id: "remember_me" %></th>
+                              <th><%= link_to "確認", user_path(user), class: "btn btn-primary", :target=>["_blank"] %></th>
+                            </tr>
+                          </tbody>
+                         <% end %>
+                       <% end %>
+                     <% end %>
+                 </table>
+                </div>
+            <% end %>
+          <table class="center">
+            <%= f.submit"変更を送信する", class: "btn btn-lg btn-primary" %>
+          </table>
+        <% end %>
+    </div>
+  </div>
+</div>

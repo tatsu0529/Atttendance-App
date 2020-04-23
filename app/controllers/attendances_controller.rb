@@ -131,8 +131,10 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   def confirm_log_change
     @user = User.find(params[:id])
-    @attendances = @user.attendances.where(params[:id])
-  end 
+    @attendances = Attendance.where(params[:id]).where('worked_on LIKE ?', "%#{params[:search]}%")
+  end
+    
+
     
   private
   
@@ -160,4 +162,5 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   def one_month_params
     params.require(:user).permit(attendances: :approval_by_boss)[:attendances]
   end 
+
 end

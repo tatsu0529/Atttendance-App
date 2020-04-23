@@ -2,22 +2,24 @@
 
 <h1>勤怠ログ</h1>
 
+<%= form_with url: attendances_confirm_log_change_user_path, method: :get, local: true do |f| %>
 <table class="table table-bordered table-hover table-log">
   <thead>
+  
   <tr>
-    <th>リセット</th>
+    <%= f.submit 'リセット', name: nil %>
+  </tr>
+  
+   <tr>
+    <th>年指定</th>
+    <th><%= f.select :search, [[""],["2018"],["2019"],["2020"]], class: "form-control" %></th>
   </tr>
   
   <tr>
-    <th>年</th>
+    <th>月指定</th>
     <th></th>
   </tr>
-  
-  <tr>
-    <th>月</th>
-    <th></th>
-  </tr>
-  
+<% end %>
   <tr>
     <th>日付</th>
     <th>変更前出社時間</th>

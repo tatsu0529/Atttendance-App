@@ -65,7 +65,7 @@
 			<% end %>
 		<% end%>
 		<% if @link_to1 == 1 %>
-			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance) %>
+			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance),remote: true %>
 				 <%= "#{@attendance_sum}件の通知があります。" %>
 			</p>
 		<% else %>
@@ -82,7 +82,7 @@
 			<% end %>
 		<% end %>
 		<% if @link_to2 == 1 %>
-			<p class = "alart-for-boss"><%= link_to "【勤怠変更申請のお知らせ】",attendances_attendance_change_user_path(@attendance) %>
+			<p class = "alart-for-boss"><%= link_to "【勤怠変更申請のお知らせ】",attendances_attendance_change_user_path(@attendance),remote: true %>
 			   <%= "#{@change_sum}件の通知があります。"%>
 			</p>
 		<% else %>
@@ -99,7 +99,7 @@
 			<% end %>
 		<% end %>
 		<% if @link_to3 == 1 %>
-			<p class = "alart-for-boss"><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance) %>
+			<p class = "alart-for-boss"><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance),remote: true %>
 				 <%= "#{@overtime_sum}件の通知があります。" %>
 			</p>
 		<% else %>
@@ -304,3 +304,4 @@
 <div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>		
 <div id="overtime_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="attendance_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="attendance_change" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
