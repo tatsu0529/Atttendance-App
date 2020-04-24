@@ -7,6 +7,8 @@ gem 'rounding'
 gem 'roo'
 gem 'faker'
 gem 'bootstrap-sass'
+gem 'ransack'
+gem 'kaminari'
 gem 'hirb'         # 出力結果を表として出力するgem
 gem 'hirb-unicode'  # マルチバイト文字の表示を補正するgem
 gem 'will_paginate'

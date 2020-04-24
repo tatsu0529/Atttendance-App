@@ -131,10 +131,14 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   def confirm_log_change
     @user = User.find(params[:id])
-    @attendances = Attendance.where(params[:id]).where('worked_on LIKE ?', "%#{params[:search]}%")
+    if params[:B].blank?
+      @day = "-" + params[:A] + "-"
+      @attendances = Attendance.where(params[:id]).where('worked_on LIKE ?' , "%#@day%")
+    else
+      @day = params[:B] + "-" + params[:A]
+      @attendances = Attendance.where(params[:id]).where('worked_on LIKE ?', "#@day%")
+    end
   end
-    
-
     
   private
   
