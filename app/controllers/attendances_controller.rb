@@ -89,7 +89,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 1ヶ月分の勤怠申請
   def request_one_month
     if Attendance.where(['user_id = ?', current_user.id])\
-                 .where(['worked_on = ?', Date.current.end_of_month])\
+                 .where(worked_on: params[:date])\
                  .update(request_one_month: params[:user][:attendance][:request_one_month])
       flash[:success] = "1ヶ月分の勤怠を申請しました。"
     end
@@ -132,7 +132,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   def confirm_log_change
     @user = User.find(params[:id])
     if params[:B].blank?
-      @day = "-" + params[:A] + "-"
+      @day = "-" + params[:A] + "-" if params[:A].present?
       @attendances = Attendance.where(params[:id]).where('worked_on LIKE ?' , "%#@day%")
     else
       @day = params[:B] + "-" + params[:A]
