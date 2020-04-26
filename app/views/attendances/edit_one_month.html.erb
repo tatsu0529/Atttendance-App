@@ -29,19 +29,19 @@
               <td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday]%></td>
               <% if (Date.current < day.worked_on) %>
                 <td><%= attendance. time_field :latest_started_at, readonly: true, class: "form-control" %></td>
-                <th><%= attendance. time_field :latest_finished_at, readonly: true, class: "form_control" %></th>
+                <td><%= attendance. time_field :latest_finished_at, readonly: true, class: "form-control" %></td>
               <% else %>  
                 <td><%= attendance. time_field :latest_started_at, class: "form-control" %></td>
-                <th><%= attendance. time_field :latest_finished_at, class: "form_control" %></th>
+                <td><%= attendance. time_field :latest_finished_at, class: "form-control" %></td>
               <% end %>
-              <th><%= attendance.check_box :change, id: "remember_me"%></th>
-              <th>
+              <td><%= attendance.check_box :change, id: "remember_me"%></td>
+              <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= working_times(day.started_at, day.finished_at) %>
                 <% end %>
-              </th>
-              <th><%= attendance.text_field :note, class: "form-control" %></th>
-              <th><%= attendance.collection_select(:request_for_change, @users, :name, :name, include_blank: true )%></th>
+              </td>
+              <td><%= attendance.text_field :note, class: "form-control" %></td>
+              <td><%= attendance.collection_select(:request_for_change, @users, :name, :name, include_blank: true )%></td>
             </tr>
           <% end %>
         <% end %>

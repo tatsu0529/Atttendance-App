@@ -13,7 +13,7 @@ class Attendance < ApplicationRecord
   end
   
   def finish_time_is_invalid_without_a_started_at
-    errors.add(:started_at, "が必要でdす。")if started_at.blank? && finish_time.present?
+    errors.add(:started_at, "が必要でdす。") if started_at.blank? && finish_time.present?
   end 
   
 end

@@ -254,7 +254,6 @@
 										<td colspan="5"></td>
 										<td>
 											<% if @user == current_user %>
-											<% raise %>
 												<% if @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.nil? %>
 													<p><%= "#{@last_attendance.request_one_month}：申請中" %></p>
 												<% elsif @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.present? %>
