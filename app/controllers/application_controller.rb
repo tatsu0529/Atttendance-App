@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless current_user.admin?
   end
   
+  def superior_user
+    redirect_to root_url unless current_user.superior?
+  end 
+  
   def month
     @month = Date.current
   end 
@@ -79,6 +83,6 @@ class ApplicationController < ActionController::Base
   end 
   
   def users
-    @users = User.where(affiliation: "上長").where.not(id: current_user)
+    @users = User.where(superior: true).where.not(id: current_user)
   end
 end

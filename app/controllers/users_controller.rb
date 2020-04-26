@@ -5,27 +5,21 @@ class UsersController < ApplicationController
   # before_action :correct_user, only: [:edit, :update]
   before_action :month, only: :show
   before_action :set_one_month, only: :show
-  before_action :users
+  before_action :users, only: :show
   
   def index
     @users = User.paginate(page: params[:page], per_page: 20)
   end
   
-  
-  def self.import(file)
-    columns = %i(name, email, affiliation, employee_number)
-    CSV.foreach(file.path, headers: true) do |row|
-      values = []
-      values << [ row[0], row[1], row[2], row[3]]
-      User.import columns, values
-    end
-  end
-  
   def import
-    # fileはtmpに自動で一時保存される
-    User.import(params[:file])
-    flash[:success] = 'ファイルをインポートしました。'
-    redirect_to users_url
+    if params[:file].blank?
+      flash[:danger] = 'CSVを選択してください'
+      redirect_to users_url
+    else
+      User.import(params[:file])
+      flash[:success] = 'ファイルをインポートしました。'
+      redirect_to users_url
+    end 
   end
   
   
@@ -34,7 +28,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    # @user = User.find(params[:id])
+    @last_attendance = Attendance.find_by(worked_on: @last_day)
     @all_users = User.all
     @attendance = Attendance.find(params[:id])
     @all_attendances = Attendance.all

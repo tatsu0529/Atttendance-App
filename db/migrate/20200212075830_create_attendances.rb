@@ -20,6 +20,7 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.datetime :latest_finished_at
       t.datetime :start_on
       t.datetime :end_on
+      t.date :tomorrow
       t.timestamps
     end
   end

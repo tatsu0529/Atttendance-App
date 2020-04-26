@@ -16,7 +16,8 @@ User.create!(name: "上長A",
              password_confirmation: "password",
              affiliation: "上長",
              employee_number: "2",
-             uid: "2")
+             uid: "2",
+             superior: true)
              
 User.create!(name: "上長B",
              email: "sample-2@email.com",
@@ -24,4 +25,5 @@ User.create!(name: "上長B",
              password_confirmation: "password",
              affiliation: "上長",
              employee_number: "3",
-             uid: "3")
+             uid: "3",
+             superior: true)

@@ -53,8 +53,8 @@
 	</table>
 </div>
 
-<% if @user == current_user %>
-	<div class="btn-users-show">
+<% if @user.superior? %>
+	<div class="btn-users-show btn-superior-applies">
 		<!--所長承認のお知らせ条件分岐-->
 		<% @all_attendances.each do |a| %>
 			<% if a.request_one_month.present? && a.approval_by_boss.nil?%>
@@ -65,7 +65,7 @@
 			<% end %>
 		<% end%>
 		<% if @link_to1 == 1 %>
-			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance) %>
+			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance)%>
 				 <%= "#{@attendance_sum}件の通知があります。" %>
 			</p>
 		<% else %>
@@ -254,10 +254,13 @@
 										<td colspan="5"></td>
 										<td>
 											<% if @user == current_user %>
-												<% if @attendance.approval_by_boss.nil? %>
-													<p>所長承認：未</p>
-												<% elsif @attendance.approval_by_boss.present? %>
+											<% raise %>
+												<% if @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.nil? %>
+													<p><%= "#{@last_attendance.request_one_month}：申請中" %></p>
+												<% elsif @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.present? %>
 													<p>所長承認済み</p>
+												<% else %>
+													<p>所長承認：未提出</p>
 												<% end %>
 												<p><%= one_month.collection_select(:request_one_month, @users, :name, :name)%></p>
 													 <%= f.submit yield(:button_text),class: "btn btn-primary" %>

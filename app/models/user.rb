@@ -11,8 +11,8 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true
   validates :department, length: { in: 2..30 }, allow_blank: true
-  validates :basic_time, presence: true
-  validates :work_time, presence: true
+  # validates :basic_time, presence: true
+  # validates :work_time, presence: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   
@@ -51,7 +51,7 @@ class User < ApplicationRecord
   end
   
   def self.import(file)
-  CSV.foreach(file.path, headers: true) do |row|
+  CSV.foreach(file.path,encoding: 'Shift_JIS:UTF-8', headers: true) do |row|
     user = new
     user.attributes = row.to_hash.slice(*updatable_attributes)
     user.save
