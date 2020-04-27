@@ -64,6 +64,10 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 残業申請
   def request_overtime
     if @attendance.update_attributes(overtime_params)
+      # 24時間を足す
+      # if @attendance.tomorrow == "1"
+      #   @attendance = @attendance.finish_time + 1
+      # end 
       flash[:success] = "残業を申請しました。"
     end 
     redirect_to user_url(current_user)
@@ -144,12 +148,12 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月の勤怠更新時
   def attendances_params
-    params.require(:user).permit(attendances: [:latest_started_at, :latest_finished_at, :note, :request_for_change])[:attendances]
+    params.require(:user).permit(attendances: [:latest_started_at, :latest_finished_at, :note, :request_for_change, :tomorrow])[:attendances]
   end
   
   # 残業申請時
   def overtime_params
-    params.require(:attendance).permit(:finish_time, :work_contents, :mark_of_instructor)
+    params.require(:attendance).permit(:finish_time, :work_contents, :mark_of_instructor, :tomorrow)
   end 
   
   # 残業申請への返信

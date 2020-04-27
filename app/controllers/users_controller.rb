@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     @all_users = User.all
     @attendance = Attendance.find(params[:id])
     @all_attendances = Attendance.all
-    @worked_sum = @attendances.where.not(started_at: nil).count
+    @worked_sum = @attendances.where.not(started_at: nil).or(@attendances.where.not(latest_started_at: nil)).count
     @user_sum = User.joins(:attendances).group("users.id").where.not(attendances: {request_one_month: nil})
     @link_to1 = 0
     @link_to2 = 0

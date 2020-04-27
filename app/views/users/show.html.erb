@@ -22,7 +22,7 @@
 				<td>所属:<%= @user.affiliation %></td>
 				<td>氏名:  <%= @user.name %></td>
 				<td colspan="2">コード<%= @user.employee_number %></td>
-				<td>出勤日数:<%= @worked_sum %></td>
+				<td>出勤日数:<%= @woked_sum %></td>
 				<td>月末日<%= l(@last_day, format: :short) %></td>
 			</tr>
 		<% else %>
@@ -181,8 +181,8 @@
 								</td>
 							
 							<% if day.latest_finished_at.present? %>
-								<td><%= l(day.latest_finished_at, format: :hour) %></td>
-								<td><%= l(day.latest_finished_at.floor_to(15.minutes), format: :minute) %></td>
+									<td><%= l(day.latest_finished_at, format: :hour) %></td>
+									<td><%= l(day.latest_finished_at.floor_to(15.minutes), format: :minute) %></td>
 							<% else %>
 								<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
 								<td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
@@ -193,15 +193,21 @@
 									<% end %>
 								</td>
 							<td>
-								<% if day.started_at.present? && day.finished_at.present?\
-									 && day.latest_started_at.nil? && day.latest_finished_at. nil? %>
+								<% if day.started_at.present? && day.finished_at.present? && 
+											day.latest_started_at.nil? && day.latest_finished_at. nil? %>
 									<%= str_times = working_times(day.started_at, day.finished_at) %>
-									<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+									<% @working_times1 = @working_times1.to_f + str_times.to_f %>
 									
-								<% elsif day.started_at.present? && day.finished_at.present?\
-									 && day.latest_started_at.present? && day.latest_finished_at. present? %>
-									<%= str_times = working_times(day.latest_started_at, day.latest_finished_at) %>
-									<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+								<% elsif day.started_at.nil? && day.finished_at.nil? &&
+												 day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times2 = working_times(day.latest_started_at, day.latest_finished_at) %>
+									<% @working_times2 = @working_times2.to_f + str_times2.to_f %>
+									
+									
+								<% elsif day.started_at.present? && day.finished_at.nil? &&
+												 day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times3 = working_times(day.latest_started_at, day.latest_finished_at) %>
+									<% @working_times3 = @working_times3.to_f + str_times3.to_f %>
 								<% end %>
 							</td>
 							<td><%= day.note %></td>
@@ -209,9 +215,18 @@
 							<td><%= l(day.finish_time.floor_to(15.minutes), format: :minute) if day.finish_time.present? %></td>
 							<td>
 								<% if day.finished_at.present? && day.latest_finished_at.nil? %>
-									<%= str_times = over_working_times(@user.designed_work_finish_time, day.finished_at) %>
+									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
+									
+								<% elsif day.finished_at.nil? && day.latest_finished_at.present? %>
+									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
+									
 								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
-									<%= str_times = over_working_times(@user.designed_work_finish_time, day.latest_finished_at) %>
+									<% if day.finished_at > day.latest_finished_at %>
+										<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
+										
+									<% elsif day.finished_at < day.latest_finished_at %>
+										<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f) %>
+									<% end %>
 								<% end %>
 							</td>
 							<td><%= day.work_contents %></td>
@@ -240,7 +255,7 @@
 							</td>
 						</tr>
 						<% if @user == current_user %>
-							<% if day.worked_on == day.worked_on.beginning_of_month %>
+							<% if day.worked_on == day.worked_on.beginning_of_month %> #こいつのせいで時間が出なくなってる
 							<%= form_with(model:@user, url: attendances_request_one_month_user_path(@user, date: day.worked_on.end_of_month), local: true, method: :patch) do |f| %>
 								<%= f.fields_for @attendance do |one_month| %>
 		
@@ -250,8 +265,10 @@
 										<td></td>
 										<td colspan="2"></td>
 										<td colspan="6"></td>
-										<td><%= format("%.2f", @total_working_times.to_f) %></td>
-										<td colspan="5"></td>
+										<td><p>【就業合計時間】</p><%= format("%.2f", @working_times2.to_f) %></td>
+										<td colspan="3"></td>
+										<td><p>【残業合計時間】</p><%= %></td>
+										<td></td>
 										<td>
 											<% if @user == current_user %>
 												<% if @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.nil? %>
