@@ -13,20 +13,13 @@
     <p>Example</p>
     <% @users.each do |user| %>
       <tr>
-        <td>
-          <% if current_user.admin? %>
-            <%= link_to user.name, user %><br/>
-          <% else %>
-            <%= user.name %>
-          <% end %>
+        <%= user.name %>
           <% if current_user.admin? && !current_user?(user) %>
             <p><%= link_to "削除", user, method: :delete, class: "btn btn-primary btn-index",
               data: {confirm: "削除してよろしいですか？" } %></p>
             <div class="well">
-
               <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample<%= user.id %>" \
                  role="button" aria-expanded="false" aria-controls="collapseExample">編集</a>
-                
               <div class="collapse" id="collapseExample<%= user.id %>">
                 <div class="card card-body">
                   <%= form_with(model: user, url: user_path(user), local: true, method: :patch) do |f| %>

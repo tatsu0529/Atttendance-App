@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   before_action :users, only: :show
   
   def index
-    @users = User.paginate(page: params[:page], per_page: 20)
+    @users = User.paginate(page: params[:page], per_page: 20).where.not(id: 1)
   end
   
   def import
