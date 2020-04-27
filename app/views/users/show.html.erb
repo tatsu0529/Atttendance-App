@@ -65,7 +65,7 @@
 			<% end %>
 		<% end%>
 		<% if @link_to1 == 1 %>
-			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】", attendances_attendance_confirmation_user_path(@attendance)%>
+			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】",attendances_attendance_confirmation_user_path(@attendance),remote: true%>
 				 <%= "#{@attendance_sum}件の通知があります。" %>
 			</p>
 		<% else %>
@@ -110,7 +110,7 @@
 
 	<div>
 		<table class="table table-bordered table-condensed table-hover" id="table-attendances">
-			<thead>
+			<thead class= "thead-attendance-header">
 				<tr>
 					 <!--rowspan:縦結合、colspan：横結合-->
 					<th rowspan="3">残業申請</th>
@@ -255,11 +255,11 @@
 										<td>
 											<% if @user == current_user %>
 												<% if @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.nil? %>
-													<p><%= "#{@last_attendance.request_one_month}：申請中" %></p>
+													<p><%= "【#{@last_attendance.request_one_month}：申請中】" %></p>
 												<% elsif @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.present? %>
-													<p>所長承認済み</p>
+													<p><%= "【#{@last_attendance.request_one_month}：#{@last_attendance.approval_by_boss}】"%></p>
 												<% else %>
-													<p>所長承認：未提出</p>
+													<p>【所長承認：未提出】</p>
 												<% end %>
 												<p><%= one_month.collection_select(:request_one_month, @users, :name, :name)%></p>
 													 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
@@ -278,6 +278,6 @@
 
 <!--モーダル 表示-->
 <div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>		
-<div id="overtime_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="attendance_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="attendance_change" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="overtime_confirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

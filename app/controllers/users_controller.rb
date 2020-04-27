@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    @last_attendance = Attendance.find_by(worked_on: @last_day)
+    @last_attendance = @user.attendances.find_by(worked_on: @last_day)
     @all_users = User.all
     @attendance = Attendance.find(params[:id])
     @all_attendances = Attendance.all

@@ -34,7 +34,7 @@
                 <td><%= attendance. time_field :latest_started_at, class: "form-control" %></td>
                 <td><%= attendance. time_field :latest_finished_at, class: "form-control" %></td>
               <% end %>
-              <td><%= attendance.check_box :change, id: "remember_me"%></td>
+              <td><%= attendance.check_box :tomorrow, id: "remember_me"%></td>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= working_times(day.started_at, day.finished_at) %>
