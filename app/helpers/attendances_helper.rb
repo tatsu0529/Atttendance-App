@@ -15,4 +15,8 @@ module AttendancesHelper
   def over_working_times(designed_work_finish_time, finish_time)
     format("%.2f", (((finish_time - designed_work_finish_time) / 60) / 60.0))
   end 
+  
+  def over_working_times2(designed_work_finish_time, finish_time)
+    format("%.2f", (((finish_time + 24*60*60 - designed_work_finish_time) / 60) / 60.0))
+  end 
 end

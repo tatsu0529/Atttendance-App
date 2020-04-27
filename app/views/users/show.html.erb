@@ -144,76 +144,73 @@
 			
 			<tbody>
 				<% @attendances.each do |day| %>
-					<% @month = day %>
-						<% if @user == current_user %>
-							<% if day.worked_on == day.worked_on.beginning_of_month %>
-								<%= link_to "勤怠を変更", attendances_edit_one_month_user_path(@user, date: day.worked_on), class: "btn btn-primary btn-attendance" %>
-								<%= link_to "CSV出力", user_path(format: :csv), class: "btn btn-primary btn-attendance" %></br>
-								<%= link_to "勤怠修正ログ（承認済み）", attendances_confirm_log_change_user_path(@user), class: "btn btn-primary btn-attendance" %>
-							<% end %>
+					<% if @user == current_user %>
+						<% if day.worked_on == day.worked_on.beginning_of_month %>
+							<%= link_to "勤怠を変更", attendances_edit_one_month_user_path(@user, date: day.worked_on), class: "btn btn-primary btn-attendance" %>
+							<%= link_to "CSV出力", user_path(format: :csv), class: "btn btn-primary btn-attendance" %></br>
+							<%= link_to "勤怠修正ログ（承認済み）", attendances_confirm_log_change_user_path(@user), class: "btn btn-primary btn-attendance" %>
 						<% end %>
-						<% css_class = case $days_of_the_week[day.worked_on.wday]
-								when '土'
-									'text-primary'
-								when '日'
-									'text-danger'
-								end %>
-						<tr>
+					<% end %>
+					<% css_class = case $days_of_the_week[day.worked_on.wday]
+							when '土'
+								'text-primary'
+							when '日'
+								'text-danger'
+							end %>
+					<tr>
+						<td>
+							<% if @user == current_user %>
+								<%= link_to "残業申請", attendances_overtime_user_path(@user, date: day.worked_on), remote: true, class: "btn btn-primary" %>
+							<% end %>
+						</td>
+						<td><%= l(day.worked_on, format: :short) %></td>
+						<td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday]%></td>
+						
+						<% if day.latest_started_at.present? %>
+							<td><%= l(day.latest_started_at, format: :hour) %></td>
+							<td><%= l(day.latest_started_at.floor_to(15.minutes), format: :minute) %></td>
+						<% else %>
+							<td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
+							<td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
+						<% end %>
 							<td>
-								<% if @user == current_user %>
-									<%= link_to "残業申請", attendances_overtime_user_path(@user, date: day.worked_on), remote: true, class: "btn btn-primary" %>
+								<% if (Date.current == day.worked_on) && day.started_at.nil?  %>
+									<%= link_to "出勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
 								<% end %>
 							</td>
-							<td><%= l(day.worked_on, format: :short) %></td>
-							<td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday]%></td>
-							
-							<% if day.latest_started_at.present? %>
-								<td><%= l(day.latest_started_at, format: :hour) %></td>
-								<td><%= l(day.latest_started_at.floor_to(15.minutes), format: :minute) %></td>
-							<% else %>
-								<td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
-								<td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
-							<% end %>
-								<td>
-									<% if (Date.current == day.worked_on) && day.started_at.nil?  %>
-										<%= link_to "出勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
-									<% end %>
-								</td>
-							
-							<% if day.latest_finished_at.present? %>
-									<td><%= l(day.latest_finished_at, format: :hour) %></td>
-									<td><%= l(day.latest_finished_at.floor_to(15.minutes), format: :minute) %></td>
-							<% else %>
-								<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
-								<td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
-							<% end %>
-								<td>
-									<% if (Date.current == day.worked_on) && day.finished_at.nil? && day.started_at.present? %>
-										<%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
-									<% end %>
-								</td>
+						
+						<% if day.latest_finished_at.present? %>
+								<td><%= l(day.latest_finished_at, format: :hour) %></td>
+								<td><%= l(day.latest_finished_at.floor_to(15.minutes), format: :minute) %></td>
+						<% else %>
+							<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
+							<td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? && day.latest_finished_at.nil? %></td>
+						<% end %>
 							<td>
-								<% if day.started_at.present? && day.finished_at.present? && 
-											day.latest_started_at.nil? && day.latest_finished_at. nil? %>
-									<%= str_times = working_times(day.started_at, day.finished_at) %>
-									<% @working_times1 = @working_times1.to_f + str_times.to_f %>
-									
-								<% elsif day.started_at.nil? && day.finished_at.nil? &&
-												 day.latest_started_at.present? && day.latest_finished_at. present? %>
-									<%= str_times2 = working_times(day.latest_started_at, day.latest_finished_at) %>
-									<% @working_times2 = @working_times2.to_f + str_times2.to_f %>
-									
-									
-								<% elsif day.started_at.present? && day.finished_at.nil? &&
-												 day.latest_started_at.present? && day.latest_finished_at. present? %>
-									<%= str_times3 = working_times(day.latest_started_at, day.latest_finished_at) %>
-									<% @working_times3 = @working_times3.to_f + str_times3.to_f %>
+								<% if (Date.current == day.worked_on) && day.finished_at.nil? && day.started_at.present? %>
+									<%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
 								<% end %>
 							</td>
-							<td><%= day.note %></td>
-							<td><%= l(day.finish_time, format: :hour) if day.finish_time.present? %></td>
-							<td><%= l(day.finish_time.floor_to(15.minutes), format: :minute) if day.finish_time.present? %></td>
-							<td>
+						<td>
+							<% if day.started_at.present? && day.finished_at.present? && 
+										day.latest_started_at.nil? && day.latest_finished_at. nil? %>
+								<%= str_times1 = working_times(day.started_at, day.finished_at) %>
+								
+							<% elsif day.started_at.nil? && day.finished_at.nil? &&
+											 day.latest_started_at.present? && day.latest_finished_at. present? %>
+								<%= str_times2 = working_times(day.latest_started_at, day.latest_finished_at) %>
+								
+							<% elsif day.started_at.present? && day.finished_at.nil? &&
+											 day.latest_started_at.present? && day.latest_finished_at. present? %>
+								<%= str_times3 = working_times(day.latest_started_at, day.latest_finished_at) %>
+							<% end %>
+						<% @working_times = @working_times.to_f + str_times1.to_f + str_times2.to_f + str_times3.to_f %>
+						</td>
+						<td><%= day.note %></td>
+						<td><%= l(day.finish_time, format: :hour) if day.finish_time.present? %></td>
+						<td><%= l(day.finish_time.floor_to(15.minutes), format: :minute) if day.finish_time.present? %></td>
+						<td>
+							<% if day.tomorrow != "1" %>
 								<% if day.finished_at.present? && day.latest_finished_at.nil? %>
 									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
 									
@@ -228,67 +225,84 @@
 										<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f) %>
 									<% end %>
 								<% end %>
-							</td>
-							<td><%= day.work_contents %></td>
-							<td>
-								<% if day.mark_of_instructor.present? && day.mark_by_instructor.nil? %>
-									<p>
-										【<%= day.mark_of_instructor %>:
-										 <%= "残業申請中" %>】
-									</p>
-								<% elsif day.mark_of_instructor.present? && day.mark_by_instructor.present? %>
-									<p>
-										【<%= day.mark_of_instructor %>:
-										 <%= "残業#{day.mark_by_instructor}" %>】
-									</p>
-								<% end %>
-								<% if day.request_for_change.present? && day.approve_change.nil? %>
-									<p>
-										【<%= day.request_for_change %>:
-										 <%= "勤怠変更申請中" %>】
-									</p>
-								<% elsif day.request_for_change.present? && day.approve_change.present? %>
-									<p>
-										【<%= day.request_for_change %>
-										<%= "勤怠編集#{day.approve_change}" %>】
-								<% end %>
-							</td>
-						</tr>
-						<% if @user == current_user %>
-							<% if day.worked_on == day.worked_on.beginning_of_month %> #こいつのせいで時間が出なくなってる
-							<%= form_with(model:@user, url: attendances_request_one_month_user_path(@user, date: day.worked_on.end_of_month), local: true, method: :patch) do |f| %>
-								<%= f.fields_for @attendance do |one_month| %>
-		
-								<tfoot>
-									<tr>
-										<!--rowspan:縦結合、colspan：横結合-->
-										<td></td>
-										<td colspan="2"></td>
-										<td colspan="6"></td>
-										<td><p>【就業合計時間】</p><%= format("%.2f", @working_times2.to_f) %></td>
-										<td colspan="3"></td>
-										<td><p>【残業合計時間】</p><%= %></td>
-										<td></td>
-										<td>
-											<% if @user == current_user %>
-												<% if @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.nil? %>
-													<p><%= "【#{@last_attendance.request_one_month}：申請中】" %></p>
-												<% elsif @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.present? %>
-													<p><%= "【#{@last_attendance.request_one_month}：#{@last_attendance.approval_by_boss}】"%></p>
-												<% else %>
-													<p>【所長承認：未提出】</p>
-												<% end %>
-												<p><%= one_month.collection_select(:request_one_month, @users, :name, :name)%></p>
-													 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
-											<% end %>
-										</td>
-									</tr>
-								</tfoot>  
+								
+							<% else %>
+								<% if day.finished_at.present? && day.latest_finished_at.nil? %>
+									<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
+									
+								<% elsif day.finished_at.nil? && day.latest_finished_at.present? %>
+									<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
+									
+								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
+									<% if day.finished_at > day.latest_finished_at %>
+										<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
+										
+									<% elsif day.finished_at < day.latest_finished_at %>
+										<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f) %>
+									<% end %>
 								<% end %>
 							<% end %>
+							
+						<% @over_working_times = @over_working_times.to_f + str_times.to_f %>
+						</td>
+						<td><%= day.work_contents %></td>
+						<td>
+							<% if day.mark_of_instructor.present? && day.mark_by_instructor.nil? %>
+								<p>
+									【<%= day.mark_of_instructor %>:
+									 <%= "残業申請中" %>】
+								</p>
+							<% elsif day.mark_of_instructor.present? && day.mark_by_instructor.present? %>
+								<p>
+									【<%= day.mark_of_instructor %>:
+									 <%= "残業#{day.mark_by_instructor}" %>】
+								</p>
+							<% end %>
+							<% if day.request_for_change.present? && day.approve_change.nil? %>
+								<p>
+									【<%= day.request_for_change %>:
+									 <%= "勤怠変更申請中" %>】
+								</p>
+							<% elsif day.request_for_change.present? && day.approve_change.present? %>
+								<p>
+									【<%= day.request_for_change %>
+									<%= "勤怠編集#{day.approve_change}" %>】
+							<% end %>
+						</td>
+					</tr>
+				<% end %>
+				<% if @user == current_user %>
+					<%= form_with(model:@user, url: attendances_request_one_month_user_path(@user, date: @attendance.worked_on.end_of_month), local: true, method: :patch) do |f| %>
+						<%= f.fields_for @attendance do |one_month| %>
+
+							<tfoot>
+								<tr>
+									<!--rowspan:縦結合、colspan：横結合-->
+									<td></td>
+									<td colspan="2"></td>
+									<td colspan="6"></td>
+									<td><p>【就業合計時間】</p><%= format("%.2f", @working_times.to_f) %></td>
+									<td colspan="3"></td>
+									<td><p>【残業合計時間】</p><%= format("%.2f", @over_working_times.to_f) %></td>
+									<td></td>
+									<td>
+										<% if @user == current_user %>
+											<% if @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.nil? %>
+												<p><%= "【#{@last_attendance.request_one_month}：申請中】" %></p>
+											<% elsif @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.present? %>
+												<p><%= "【#{@last_attendance.request_one_month}：#{@last_attendance.approval_by_boss}】"%></p>
+											<% else %>
+												<p>【所長承認：未提出】</p>
+											<% end %>
+											<p><%= one_month.collection_select(:request_one_month, @users, :name, :name)%></p>
+												 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
+										<% end %>
+									</td>
+								</tr>
+							</tfoot>  
 						<% end %>
 					<% end %>
-				<% end %>  
+				<% end %>
 			</tbody>
 		</table>
 	</div>
