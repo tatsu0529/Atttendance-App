@@ -27,3 +27,11 @@ User.create!(name: "上長B",
              employee_number: "3",
              uid: "3",
              superior: true)
+             
+User.create!(name: "たつや",
+             email: "sample-3@email.com",
+             password: "password",
+             password_confirmation: "password",
+             affiliation: "上長",
+             employee_number: "3",
+             uid: "3")
