@@ -3,53 +3,32 @@
 
 <div>
 	<table class="table table-bordered table-condensed user-table">
-		<% if current_user.admin? %>
-			<tr>
-				<td>
+		<tr>
+			<td>
+				<% if @user == current_user %>
 					<%= link_to "⇦", user_path(date: @first_day.prev_month), class: "btn btn-primary" %>
 					【<%= l(@first_day, format: :middle) %>】勤怠管理表
 					<%= link_to "⇨", user_path(date: @first_day.next_month), class: "btn btn-primary" %>
-					</td>
-				<td>
-					指定勤務開始時間<br/>
-					指定勤務終了時間
-					</td>
-				<td colspan="3">基本時間</td>
-				<td>初日:<%= l(@first_day, format: :short) %></td>
-			</tr>
-			
-			<tr>
-				<td>所属:<%= @user.affiliation %></td>
-				<td>氏名:  <%= @user.name %></td>
-				<td colspan="2">コード<%= @user.employee_number %></td>
-				<td>出勤日数:<%= @woked_sum %></td>
-				<td>月末日<%= l(@last_day, format: :short) %></td>
-			</tr>
-		<% else %>
-			
-			<tr>
-				<td>
-					<%= link_to "⇦", user_path(date: @first_day.prev_month), class: "btn btn-primary" %>
+				<% else %>
 					【<%= l(@first_day, format: :middle) %>】勤怠管理表
-					<%= link_to "⇨", user_path(date: @first_day.next_month), class: "btn btn-primary" %>
-					</td>
-				<td>
-					指定勤務開始時間:<%= format_basic_info(@user.designed_work_start_time ) %><br/>
-					指定勤務終了時間:<%= format_basic_info(@user.designed_work_finish_time ) %>
-					</td>
-				<td colspan="3">基本時間:<%= format_basic_info(@user. basic_time) %></td>
-				<td>初日:<%= l(@first_day, format: :short) %></td>
+				<% end %>
+				</td>
+			<td>
+				指定勤務開始時間:<%= format_basic_info(@user.designed_work_start_time ) %><br/>
+				指定勤務終了時間:<%= format_basic_info(@user.designed_work_finish_time ) %>
+				</td>
+			<td colspan="3">基本時間:<%= format_basic_info(@user. basic_time) %></td>
+			<td>初日:<%= l(@first_day, format: :short) %></td>
+		</tr>
+		
+		<tr>
+			<td>所属:<%= @user.try(:affiliation) %></td>
+			<td>氏名:  <%= @user.name %></td>
+			<td>コード</td>
+			<td>5555</td>
+			<td>出勤日数:<%= @worked_sum %></td>
+			<td>月末日<%= l(@last_day, format: :short) %></td>
 			</tr>
-			
-			<tr>
-				<td>所属:<%= @user.department.present? ? @user.department : "テスター"%></td>
-				<td>氏名:  <%= @user.name %></td>
-				<td>コード</td>
-				<td>5555</td>
-				<td>出勤日数:<%= @worked_sum %></td>
-				<td>月末日<%= l(@last_day, format: :short) %></td>
-			</tr>
-		<% end %>
 	</table>
 </div>
 
@@ -175,7 +154,9 @@
 						<% end %>
 							<td>
 								<% if (Date.current == day.worked_on) && day.started_at.nil?  %>
-									<%= link_to "出勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
+									<% if @user == current_user %>
+										<%= link_to "出勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
+									<% end %>
 								<% end %>
 							</td>
 						
@@ -188,7 +169,9 @@
 						<% end %>
 							<td>
 								<% if (Date.current == day.worked_on) && day.finished_at.nil? && day.started_at.present? %>
-									<%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
+									<% if @user == current_user %>
+										<%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attenndance" %>
+									<% end %>
 								<% end %>
 							</td>
 						<td>

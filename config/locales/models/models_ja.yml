@@ -17,7 +17,7 @@ ja:
           updated_at: 更新日
           designed_work_start_time: 指定勤務始業時間
           designed_work_finish_time: 指定勤務終業時間
-          uid: ユーザーID
+          uid: カードID
           employee_number: 従業員番号
           affiliation: 所属
         attendance:
