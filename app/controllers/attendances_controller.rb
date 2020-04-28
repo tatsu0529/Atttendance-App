@@ -137,10 +137,10 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     @user = User.find(params[:id])
     if params[:B].blank?
       @day = "-" + params[:A] + "-" if params[:A].present?
-      @attendances = @user.attendances.where(params[:id]).where('worked_on LIKE ?' , "%#@day%")
+      @attendances = @user.attendances.where(params[:id]).where('worked_on LIKE ?' , ("%#@day%"))
     else
       @day = params[:B] + "-" + params[:A]
-      @attendances = @user.attendances.where(params[:id]).where('worked_on LIKE ?', "#@day%")
+      @attendances = @user.attendances.where(params[:id]).where('worked_on LIKE ?', ("#@day%"))
     end
   end
     
