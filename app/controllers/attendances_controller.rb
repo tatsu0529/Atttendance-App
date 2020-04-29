@@ -135,13 +135,13 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   def confirm_log_change
     @user = User.find(params[:id])
-    if params[:B].blank?
-      @day = "-" + params[:A] + "-" if params[:A].present?
-      @attendances = @user.attendances.where('worked_on LIKE ?' , "%#{@day}%")
+    if params["worked_on(1i)"].present? && params["worked_on(2i)"].present?
+      year_month = "#{params["worked_on(1i)"]}/#{params["worked_on(2i)"]}"
+      @day = DateTime.parse(year_month) if year_month.present?
+      @attendances = @user.attendances.where(worked_on: @day.all_month)
     else
-      @day = params[:B] + "-" + params[:A]
-      @attendances = @user.attendances.where('worked_on LIKE ?', "#{@day}%")
-    end
+      @attendances = @user.attendances
+    end 
   end
     
   private
