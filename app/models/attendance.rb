@@ -13,6 +13,8 @@ class Attendance < ApplicationRecord
   validate :change_is_needed_when_you_approve_overtime
   validate :change_is_needed_when_you_approve_attendance
   
+  # validate :finish_time_is_needed_when_you_request_overtime
+  
   def latest_started_at_is_invalid_without_a_latest_finished_at
     errors.add(:latest_finished_at, "が必要です。") if latest_finished_at.blank? && latest_started_at.present?
   end
@@ -22,9 +24,12 @@ class Attendance < ApplicationRecord
   end 
   
   def latest_started_at_than_latest_finished_at_fast_if_invalid
-    if latest_started_at.present? && latest_finished_at.present?
+    if tomorrow == 0 && latest_started_at.present? && latest_finished_at.present?
       errors.add(:latest_started_at, "より早い退勤時間は無効です") if latest_started_at > latest_finished_at
+    elsif tomorrow == 1 && latest_started_at.present? && latest_finished_at.present?
+      errors.add(:latest_started_at, "より遅い退勤時間は無効です") if latest_started_at < latest_finished_at
     end
+
   end
   
   def change_is_needed_when_you_approve_change
@@ -38,5 +43,9 @@ class Attendance < ApplicationRecord
   def change_is_needed_when_you_approve_attendance
     errors.add(:change,"のチェックがないものは更新されません") if change == "0" && approval_by_boss.present?
   end 
+  
+  # def finish_time_is_needed_when_you_request_overtime
+  #   errors.add(:finish_time, "の記載がありません。") if finish_time.blank? && mark_of_instructor.present?
+  # end 
   
 end

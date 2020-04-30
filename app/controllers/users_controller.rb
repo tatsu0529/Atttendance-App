@@ -99,7 +99,7 @@ class UsersController < ApplicationController
   private
   
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :affiliation, :employee_number,
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :basic_time, :affiliation, :employee_number,
                                    :uid, :basic_work_time, :designed_work_start_time, :designed_work_start_time)
     end
     

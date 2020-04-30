@@ -32,7 +32,7 @@
 	</table>
 </div>
 
-<% if @user.superior? %>
+<% if @user == current_user %>
 	<div class="btn-users-show btn-superior-applies">
 		<!--所長承認のお知らせ条件分岐-->
 		<% @all_attendances.each do |a| %>
@@ -126,7 +126,7 @@
 					<% if @user == current_user %>
 						<% if day.worked_on == day.worked_on.beginning_of_month %>
 							<%= link_to "勤怠を変更", attendances_edit_one_month_user_path(@user, date: day.worked_on), class: "btn btn-primary btn-attendance" %>
-							<%= link_to "CSV出力", user_path(format: :csv), class: "btn btn-primary btn-attendance" %></br>
+							<%= link_to "CSV出力", user_path(@user, date: @first_day, format: :csv), class: "btn btn-primary btn-attendance" %></br>
 							<%= link_to "勤怠修正ログ（承認済み）", attendances_confirm_log_change_user_path(@user), class: "btn btn-primary btn-attendance" %>
 						<% end %>
 					<% end %>

@@ -20,6 +20,7 @@
                       <th>曜日</th>
                       <th>終了予定時間</th>
                       <th>指定勤務終了時間</th>
+                      <th>時間外時間</th>
                       <th>業務内容</th>
                       <th>指示者確認㊞</th>
                       <th>変更</th>
@@ -45,10 +46,11 @@
                               <th class="<%= css_class %>"><%= $days_of_the_week[overtime.worked_on.wday]%></th>
                               <th><%= format_basic_info(overtime.finish_time) %></th>
                               <th><%= format_basic_info(user.designed_work_finish_time) %></th>
+                              <th><%= str_times = over_working_times(user.designed_work_finish_time.to_f, overtime.finish_time.to_f) %></th>
                               <th><%= overtime.work_contents %></th>
                               <th><%= i.select :mark_by_instructor,[["申請中"],["承認"],["否認"]] %></th>
                               <th><%= i.check_box :change, id: "remember_me" %></th>
-                              <th><%= link_to "確認", user_path(user), class: "btn btn-primary", :target=>["_blank"] %></th>
+                              <th><%= link_to "確認", user_path(user, date: overtime.worked_on), class: "btn btn-primary", :target=>["_blank"] %></th>
                             </tr>
                           </tbody>
                          <% end %>

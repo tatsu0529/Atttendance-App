@@ -11,7 +11,7 @@
         <td>勤怠種類</td>
       </tr>
       <tr>
-          <td><%= @base.id %></td>
+          <td><%= f.text_field :number, class: "form-control" %></td>
           <td><%= f.text_field :name, class: "form-control" %></td>
           <td><%= f.select :attendance_sort, [['--'], ['出勤'], ['退勤']] %></td>
         </tr>
