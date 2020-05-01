@@ -13,7 +13,9 @@ class Attendance < ApplicationRecord
   validate :change_is_needed_when_you_approve_overtime
   validate :change_is_needed_when_you_approve_attendance
   
-  # validate :finish_time_is_needed_when_you_request_overtime
+  validate :about_one_month_status
+  
+  validate :finish_time_is_needed_when_you_request_overtime
   
   def latest_started_at_is_invalid_without_a_latest_finished_at
     errors.add(:latest_finished_at, "が必要です。") if latest_finished_at.blank? && latest_started_at.present?
@@ -24,28 +26,33 @@ class Attendance < ApplicationRecord
   end 
   
   def latest_started_at_than_latest_finished_at_fast_if_invalid
-    if tomorrow == 0 && latest_started_at.present? && latest_finished_at.present?
+    if tomorrow != "1" && latest_started_at.present? && latest_finished_at.present?
       errors.add(:latest_started_at, "より早い退勤時間は無効です") if latest_started_at > latest_finished_at
-    elsif tomorrow == 1 && latest_started_at.present? && latest_finished_at.present?
+    elsif tomorrow == "1" && latest_started_at.present? && latest_finished_at.present?
       errors.add(:latest_started_at, "より遅い退勤時間は無効です") if latest_started_at < latest_finished_at
     end
-
   end
   
   def change_is_needed_when_you_approve_change
-    errors.add(:change,"のチェックがないものは更新されません") if change =="0" && approve_change.present?
+    errors.add(:change,"のチェックがないものは更新されません") if change =="0" && change_status.present?
   end 
   
   def change_is_needed_when_you_approve_overtime
-    errors.add(:change,"のチェックがないものは更新されません") if change == "0" && mark_by_instructor.present?
+    errors.add(:change,"のチェックがないものは更新されません") if change == "0" && overtime_status.present?
   end 
   
   def change_is_needed_when_you_approve_attendance
-    errors.add(:change,"のチェックがないものは更新されません") if change == "0" && approval_by_boss.present?
+    errors.add(:change,"のチェックがないものは更新されません") if change == "0" && one_month_status.present?
   end 
   
-  # def finish_time_is_needed_when_you_request_overtime
-  #   errors.add(:finish_time, "の記載がありません。") if finish_time.blank? && mark_of_instructor.present?
-  # end 
+  def about_one_month_status
+    errors.add(:one_month_status,"は承認か否認を選択してください") if one_month_status == "なし" || one_month_status == "申請中"
+  end 
+  
+  def finish_time_is_needed_when_you_request_overtime
+    if overtime_status.present?
+      errors.add(:finish_time, "を選択してください") if finish_time.blank?
+    end 
+  end 
   
 end

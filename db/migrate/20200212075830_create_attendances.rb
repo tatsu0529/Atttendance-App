@@ -8,14 +8,11 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.references :user, foreign_key: true
       t.datetime :finish_time
       t.string :work_contents
-      t.string :mark_of_instructor
+      t.string :overtime_status
       t.datetime :overtime_hours
       t.string :change
-      t.string :mark_by_instructor
-      t.string :request_one_month
-      t.string :approval_by_boss
-      t.string :request_for_change
-      t.string :approve_change
+      t.string :one_month_status
+      t.string :change_status
       t.datetime :latest_started_at
       t.datetime :latest_finished_at
       t.datetime :start_on

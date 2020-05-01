@@ -30,8 +30,7 @@
                     
                   <% @attendance.each do |overtime| %>
                     <%= f.fields_for 'attendances[]', overtime do |i| %>
-                      <% if overtime.mark_of_instructor == current_user.name \
-                         && overtime.mark_by_instructor.nil? \
+                      <% if overtime.overtime_status == current_user.name \
                          && overtime.user_id == user.id %>
                           <% css_class = case $days_of_the_week[overtime.worked_on.wday]
                   					when '土'
@@ -48,7 +47,7 @@
                               <th><%= format_basic_info(user.designed_work_finish_time) %></th>
                               <th><%= str_times = over_working_times(user.designed_work_finish_time.to_f, overtime.finish_time.to_f) %></th>
                               <th><%= overtime.work_contents %></th>
-                              <th><%= i.select :mark_by_instructor,[["申請中"],["承認"],["否認"]] %></th>
+                              <th><%= i.select :overtime_status,[["申請中"],["承認"],["否認"]] %></th>
                               <th><%= i.check_box :change, id: "remember_me" %></th>
                               <th><%= link_to "確認", user_path(user, date: overtime.worked_on), class: "btn btn-primary", :target=>["_blank"] %></th>
                             </tr>

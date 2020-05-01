@@ -47,8 +47,7 @@
                     
                   <% @attendance.each do |change| %>
                     <%= f.fields_for 'attendances[]', change do |i| %>
-                      <% if change.request_for_change == current_user.name \
-                         && change.approve_change.nil? \
+                      <% if change.change_status == current_user.name \
                          && change.user_id == user.id %>
                           <% css_class = case $days_of_the_week[change.worked_on.wday]
                   					when '土'
@@ -72,7 +71,7 @@
                               <th><%= l(change.latest_finished_at.floor_to(15.minutes), format: :minute) if change.latest_finished_at.present?%></th>
                               
                               <th><%= change.note %></th>
-                              <th><%= i.select :approve_change,[["申請中"],["承認"],["否認"]] %></th>
+                              <th><%= i.select :change_status,[["申請中"],["承認"],["否認"]] %></th>
                               <th><%= i.check_box :change, id: "remember_me" %></th>
                               <th><%= link_to "確認", user_path(user), class: "btn btn-primary", :target=>["_blank"] %></th>
                             </tr>

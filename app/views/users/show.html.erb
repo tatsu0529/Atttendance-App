@@ -36,12 +36,10 @@
 	<div class="btn-users-show btn-superior-applies">
 		<!--所長承認のお知らせ条件分岐-->
 		<% @all_attendances.each do |a| %>
-			<% if a.request_one_month.present? && a.approval_by_boss.nil?%>
-				<% if a.request_one_month == current_user.name %>
-					<% @link_to1 = 1 %>
-					<% @attendance_sum = @attendance_sum + 1 %>
-			 	<% end %>
-			<% end %>
+			<% if a.one_month_status == current_user.name %>
+				<% @link_to1 = 1 %>
+				<% @attendance_sum = @attendance_sum + 1 %>
+		 	<% end %>
 		<% end%>
 		<% if @link_to1 == 1 %>
 			<p class = "alart-for-boss"><%= link_to "【所長承認のお知らせ】",attendances_attendance_confirmation_user_path(@attendance),remote: true%>
@@ -53,11 +51,9 @@
 		
 		<!--勤怠変更申請のお知らせ条件分岐-->
 		<% @all_attendances.each do |c| %>
-			<% if c.request_for_change.present? && c.approve_change.nil? %>
-				<% if c.request_for_change == current_user.name %>
-					<% @link_to2 = 1 %>
-					<% @change_sum = @change_sum + 1 %>
-				<% end %>
+			<% if c.change_status == current_user.name %>
+				<% @link_to2 = 1 %>
+				<% @change_sum = @change_sum + 1 %>
 			<% end %>
 		<% end %>
 		<% if @link_to2 == 1 %>
@@ -70,12 +66,10 @@
 		
 		<!--残業申請条件分岐-->
 		<% @all_attendances.each do |i| %>
-			<% if i.finish_time.present? && i.mark_by_instructor.nil? %>
-				<% if i.mark_of_instructor == current_user.name %>
-					<% @link_to3 = 1 %>
-					<% @overtime_sum = @overtime_sum + 1 %>
+			<% if i.overtime_status == current_user.name %>
+				<% @link_to3 = 1 %>
+				<% @overtime_sum = @overtime_sum + 1 %>
 				 <% end %>	
-			<% end %>
 		<% end %>
 		<% if @link_to3 == 1 %>
 			<p class = "alart-for-boss"><%= link_to "【残業申請のお知らせ】", attendances_overtime_confirmation_user_path(@attendance),remote: true %>
@@ -175,17 +169,37 @@
 								<% end %>
 							</td>
 						<td>
-							<% if day.started_at.present? && day.finished_at.present? && 
-										day.latest_started_at.nil? && day.latest_finished_at. nil? %>
-								<%= str_times1 = working_times(day.started_at, day.finished_at) %>
+							<% if day.tomorrow != "1" %>
+								<% if day.started_at.present? && day.finished_at.present? && 
+											day.latest_started_at.nil? && day.latest_finished_at. nil? %>
+									<%= str_times1 = working_times(day.started_at, day.finished_at) %>
+									
+								<% elsif day.started_at.present? && day.finished_at.present? && 
+											day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times1 = working_times(day.latest_started_at, day.latest_finished_at) %>
+									
+								<% elsif day.started_at.nil? && day.finished_at.nil? &&
+												 day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times2 = working_times(day.latest_started_at, day.latest_finished_at) %>
+									
+								<% elsif day.started_at.present? && day.finished_at.nil? &&
+												 day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times3 = working_times(day.latest_started_at, day.latest_finished_at) %>
+								<% end %>
 								
-							<% elsif day.started_at.nil? && day.finished_at.nil? &&
-											 day.latest_started_at.present? && day.latest_finished_at. present? %>
-								<%= str_times2 = working_times(day.latest_started_at, day.latest_finished_at) %>
-								
-							<% elsif day.started_at.present? && day.finished_at.nil? &&
-											 day.latest_started_at.present? && day.latest_finished_at. present? %>
-								<%= str_times3 = working_times(day.latest_started_at, day.latest_finished_at) %>
+							<% elsif %>
+								<% if day.started_at.present? && day.finished_at.present? && 
+											day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times1 = working_times2(day.latest_started_at, day.latest_finished_at) %>
+									
+								<% elsif day.started_at.nil? && day.finished_at.nil? &&
+												 day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times2 = working_times2(day.latest_started_at, day.latest_finished_at) %>
+									
+								<% elsif day.started_at.present? && day.finished_at.nil? &&
+												 day.latest_started_at.present? && day.latest_finished_at. present? %>
+									<%= str_times3 = working_times2(day.latest_started_at, day.latest_finished_at) %>
+								<% end %>
 							<% end %>
 						<% @working_times = @working_times.to_f + str_times1.to_f + str_times2.to_f + str_times3.to_f %>
 						</td>
@@ -201,28 +215,15 @@
 									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
 									
 								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
-									<% if day.finished_at > day.latest_finished_at %>
-										<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
-										
-									<% elsif day.finished_at < day.latest_finished_at %>
-										<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f) %>
-									<% end %>
+									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
 								<% end %>
 								
 							<% else %>
-								<% if day.finished_at.present? && day.latest_finished_at.nil? %>
-									<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
-									
-								<% elsif day.finished_at.nil? && day.latest_finished_at.present? %>
+								<% if day.finished_at.nil? && day.latest_finished_at.present? %>
 									<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
-									
+							
 								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
-									<% if day.finished_at > day.latest_finished_at %>
-										<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
-										
-									<% elsif day.finished_at < day.latest_finished_at %>
-										<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f) %>
-									<% end %>
+									<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f) %>
 								<% end %>
 							<% end %>
 							
@@ -230,32 +231,28 @@
 						</td>
 						<td><%= day.work_contents %></td>
 						<td>
-							<% if day.mark_of_instructor.present? && day.mark_by_instructor.nil? %>
-								<p>
-									【<%= day.mark_of_instructor %>:
-									 <%= "残業申請中" %>】
-								</p>
-							<% elsif day.mark_of_instructor.present? && day.mark_by_instructor.present? %>
-								<p>
-									【<%= day.mark_of_instructor %>:
-									 <%= "残業#{day.mark_by_instructor}" %>】
-								</p>
+							<% if day.overtime_status.present? %>
+								<% if day.overtime_status == "上長A" || day.overtime_status == "上長B" %>
+									<p>【<%= "#{day.overtime_status}:残業申請中" %>】</p>
+								<% end %>
+								<% if day.overtime_status == "承認" || day.overtime_status == "否認" %>
+									<p>【<%= "残業:#{day.overtime_status}" %>】</p>
+								<% end %>
 							<% end %>
-							<% if day.request_for_change.present? && day.approve_change.nil? %>
-								<p>
-									【<%= day.request_for_change %>:
-									 <%= "勤怠変更申請中" %>】
-								</p>
-							<% elsif day.request_for_change.present? && day.approve_change.present? %>
-								<p>
-									【<%= day.request_for_change %>
-									<%= "勤怠編集#{day.approve_change}" %>】
+							
+							<% if day.change_status.present? %>
+								<% if day.change_status == "上長A" || day.change_status == "上長B" %>
+									<p>【<%= "#{day.change_status}:勤怠変更申請中" %>】</p>
+								<% end %>
+								<% if day.change_status == "承認" || day.change_status == "否認" %>
+									<p>【<%= "勤怠編集:#{day.change_status}" %>】</p>
+								<% end %>
 							<% end %>
 						</td>
 					</tr>
 				<% end %>
 				<% if @user == current_user %>
-					<%= form_with(model:@user, url: attendances_request_one_month_user_path(@user, date: @attendance.worked_on.end_of_month), local: true, method: :patch) do |f| %>
+					<%= form_with(model:@user, url: attendances_request_one_month_user_path(@user, date: @last_attendance.worked_on), local: true, method: :patch) do |f| %>
 						<%= f.fields_for @attendance do |one_month| %>
 
 							<tfoot>
@@ -270,14 +267,18 @@
 									<td></td>
 									<td>
 										<% if @user == current_user %>
-											<% if @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.nil? %>
-												<p><%= "【#{@last_attendance.request_one_month}：申請中】" %></p>
-											<% elsif @last_attendance.request_one_month.present? && @last_attendance.approval_by_boss.present? %>
-												<p><%= "【#{@last_attendance.request_one_month}：#{@last_attendance.approval_by_boss}】"%></p>
+											<% if @last_attendance.one_month_status.present? %>
+												<% if @last_attendance.one_month_status == "上長A" || 
+															@last_attendance.one_month_status == "上長B" %>
+													<p>【<%= "#{@last_attendance.one_month_status}：申請中" %>】</p>
+												<% elsif @last_attendance.one_month_status == "承認" ||
+																 @last_attendance.one_month_status == "否認" %>
+													<p>【<%= "勤怠申請:#{@last_attendance.one_month_status}" %>】</p>
+												<% end  %>
 											<% else %>
 												<p>【所長承認：未提出】</p>
 											<% end %>
-											<p><%= one_month.collection_select(:request_one_month, @users, :name, :name)%></p>
+											<p><%= one_month.collection_select(:one_month_status, @users, :name, :name)%></p>
 												 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
 										<% end %>
 									</td>

@@ -41,7 +41,7 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td><%= attendance.collection_select(:request_for_change, @users, :name, :name, include_blank: true )%></td>
+              <td><%= attendance.collection_select(:change_status, @users, :name, :name, include_blank: true )%></td>
             </tr>
           <% end %>
         <% end %>

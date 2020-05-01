@@ -76,7 +76,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   # 残業確認
   def overtime_confirmation
     @user = User.joins(:attendances).group("users.id").where.not(attendances: {finish_time: nil})
-    @attendance = Attendance.where.not(finish_time: nil).where(mark_by_instructor: nil)
+    @attendance = Attendance.where.not(finish_time: nil)
   end
   
   # 残業申請への返信
@@ -94,7 +94,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   def request_one_month
     if Attendance.where(['user_id = ?', current_user.id])\
                  .where(worked_on: params[:date])\
-                 .update(request_one_month: params[:user][:attendance][:request_one_month])
+                 .update(one_month_status: params[:user][:attendance][:one_month_status])
       flash[:success] = "1ヶ月分の勤怠を申請しました。"
     end
     redirect_to user_url(current_user)
@@ -102,8 +102,8 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月分の勤怠申請確認
   def attendance_confirmation
-    @user = User.joins(:attendances).group("users.id").where.not(attendances: {request_one_month: nil})
-    @attendance = Attendance.where.not(request_one_month: nil).where(approval_by_boss: nil)
+    @user = User.joins(:attendances).group("users.id").where.not(attendances: {one_month_status: nil})
+    @attendance = Attendance.where.not(one_month_status: nil)
   end 
   
   # 1ヶ月分の勤怠申請の返信
@@ -119,8 +119,8 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 勤怠変更の確認
   def attendance_change
-    @user = User.joins(:attendances).group("users.id").where.not(attendances: {request_for_change: nil})
-    @attendance = Attendance.where.not(request_for_change: nil)
+    @user = User.joins(:attendances).group("users.id").where.not(attendances: {change_status: nil})
+    @attendance = Attendance.where.not(change_status: nil)
   end 
   
   def reply_change
@@ -148,27 +148,27 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月の勤怠更新時
   def attendances_params
-    params.require(:user).permit(attendances: [:latest_started_at, :latest_finished_at, :note, :request_for_change, :tomorrow])[:attendances]
+    params.require(:user).permit(attendances: [:latest_started_at, :latest_finished_at, :note, :change_status, :tomorrow])[:attendances]
   end
   
   # 残業申請時
   def overtime_params
-    params.require(:attendance).permit(:finish_time, :work_contents, :mark_of_instructor, :tomorrow)
+    params.require(:attendance).permit(:finish_time, :work_contents, :overtime_status, :tomorrow)
   end 
   
   # 残業申請への返信
   def reply_overtime_params
-    params.require(:user).permit(attendances: [:mark_by_instructor, :change])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_status, :change])[:attendances]
   end
   
   # 勤怠変更への返信
   def reply_change_params
-    params.require(:user).permit(attendances: [:approve_change, :change])[:attendances]
+    params.require(:user).permit(attendances: [:change_status, :change])[:attendances]
   end 
   
   # 1ヶ月分の勤怠への返信
   def one_month_params
-    params.require(:user).permit(attendances: [:change, :approval_by_boss])[:attendances]
+    params.require(:user).permit(attendances: [:change, :one_month_status])[:attendances]
   end 
 
 end

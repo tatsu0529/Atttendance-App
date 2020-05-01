@@ -28,14 +28,14 @@
       </tr>
       
       <% @attendances.each do |change_log| %>
-        <% if change_log.approve_change.present? %>
+        <% if change_log.change_status.present? %>
           <tr>
             <th><%= l(change_log.worked_on, format: :right) %></th>
             <th><%= l(change_log.started_at, format: :feather) if change_log.started_at.present? %></th>
             <th><%= l(change_log.finished_at, format: :feather) if change_log.finished_at.present?%></th>
             <th><%= l(change_log.latest_started_at, format: :feather) if change_log.latest_started_at.present?%></th>
             <th><%= l(change_log.latest_finished_at, format: :feather) if change_log.latest_finished_at.present?%></th>
-            <th><%= change_log.request_for_change %></th>
+            <th><%= change_log.change_status %></th>
             <th><%= l(change_log.updated_at, format: :light) %></th>
           </tr>
         <% end %>

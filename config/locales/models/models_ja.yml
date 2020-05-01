@@ -31,3 +31,8 @@ ja:
           request_one_month: 勤怠申請
           note: 備考
           work_contents: 業務内容
+        base:
+          name: 拠点名
+          number: 拠点番号
+          attendance_sort: 拠点種類
+          
