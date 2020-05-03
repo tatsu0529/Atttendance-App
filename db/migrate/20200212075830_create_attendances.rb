@@ -18,6 +18,7 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.datetime :start_on
       t.datetime :end_on
       t.string :tomorrow
+      t.string :instructor
       t.timestamps
     end
   end

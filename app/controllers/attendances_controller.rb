@@ -163,7 +163,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 勤怠変更への返信
   def reply_change_params
-    params.require(:user).permit(attendances: [:change_status, :change])[:attendances]
+    params.require(:user).permit(attendances: [:change_status, :change, :instructor])[:attendances]
   end 
   
   # 1ヶ月分の勤怠への返信

@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20200426074106) do
     t.datetime "start_on"
     t.datetime "end_on"
     t.string "tomorrow"
+    t.string "instructor"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_attendances_on_user_id"
