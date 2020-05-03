@@ -47,9 +47,9 @@
                               <th><%= format_basic_info(user.designed_work_finish_time) %></th>
                               <th>
                                 <% if overtime.tomorrow !="1" %>
-                                  <%= str_times = over_working_times(user.designed_work_finish_time.to_f, overtime.finish_time.to_f) %>
+                                  <%= str_times = over_working_times(user.designed_work_finish_time, overtime.finish_time) %>
                                 <% else %>
-                                  <%= str_times = over_working_times2(user.designed_work_finish_time.to_f, overtime.finish_time.to_f) %>
+                                  <%= str_times = over_working_times2(user.designed_work_finish_time, overtime.finish_time) %>
                                 <% end %>
                               </th>
                               <th><%= overtime.work_contents %></th>
