@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   
+  validate :user_name_and_email_is_needed_to_edit
+  
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
     cost = 
@@ -61,5 +63,11 @@ class User < ApplicationRecord
    [ "name", "email", "affiliation", "employee_number", "password"]
     # ["name",	"email",	"affiliation",	"employee number",	"uid",	"basic time",	"designed work start time", "designed work finish time", "superior", "admin",	"password"]
   end
+  
+  def user_name_and_email_is_needed_to_edit
+    if name.blank? || email.blank?
+      errors.add(:name, "必須項目が抜けています。")
+    end 
+  end 
 end
 

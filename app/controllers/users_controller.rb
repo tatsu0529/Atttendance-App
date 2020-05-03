@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_admin, :update_admin]
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :admin_user, only: [:index, :destroy, :update, :edit_basic_info, :update_basic_info]
   # before_action :correct_user, only: [:edit, :update]
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    @last_attendance = @user.attendances.find_by(worked_on: @last_day)
+    @first_attendance = @user.attendances.find_by(worked_on: @first_day)
     @all_users = User.all
     @attendance = Attendance.find(params[:id])
     @all_attendances = Attendance.all
@@ -95,6 +95,19 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
+  def edit_admin
+  end 
+  
+  def update_admin
+    if @user.update(admin_params)
+      flash[:success] = "基本情報を更新しました。"
+    else
+      flash[:danger] = "更新は失敗しました。"
+    end 
+    redirect_to edit_admin_user_url
+  end 
+  
+  
   
   private
   
@@ -103,4 +116,7 @@ class UsersController < ApplicationController
                                    :uid, :basic_work_time, :designed_work_start_time, :designed_work_start_time)
     end
     
+    def admin_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end 
 end

@@ -32,8 +32,9 @@
 	</table>
 </div>
 
-<% if @user == current_user %>
-	<div class="btn-users-show btn-superior-applies">
+<% if @user.superior? %>
+	<% if @user == current_user %>
+		<div class="btn-users-show btn-superior-applies">
 		<!--所長承認のお知らせ条件分岐-->
 		<% @all_attendances.each do |a| %>
 			<% if a.one_month_status == current_user.name %>
@@ -79,8 +80,9 @@
 			<p>【残業申請のお知らせ】</p>
 		<% end %>
 	</div>
+	<% end %>
 <% end %>
-
+<%= form_with(model:@user, url: attendances_request_one_month_user_path(@user, date: @first_day), local: true, method: :patch) do |f| %>
 	<div>
 		<table class="table table-bordered table-condensed table-hover" id="table-attendances">
 			<thead class= "thead-attendance-header">
@@ -168,7 +170,7 @@
 									<% end %>
 								<% end %>
 							</td>
-						<td>
+						<td class= working-hours >
 							<% if day.tomorrow != "1" %>
 								<% if day.started_at.present? && day.finished_at.present? && 
 											day.latest_started_at.nil? && day.latest_finished_at. nil? %>
@@ -206,24 +208,24 @@
 						<td><%= day.note %></td>
 						<td><%= l(day.finish_time, format: :hour) if day.finish_time.present? %></td>
 						<td><%= l(day.finish_time.floor_to(15.minutes), format: :minute) if day.finish_time.present? %></td>
-						<td>
+						<td class= overtime-hours >
 							<% if day.tomorrow != "1" %>
 								<% if day.finished_at.present? && day.latest_finished_at.nil? %>
-									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.finished_at.to_f) %>
+									<%= str_times = working_times(@user.designed_work_finish_time, day.finished_at) %>
 									
 								<% elsif day.finished_at.nil? && day.latest_finished_at.present? %>
-									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
+									<%= str_times = working_times(@user.designed_work_finish_time, day.latest_finished_at)%>
 									
 								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
-									<%= str_times = over_working_times(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
+									<%= str_times = working_times(@user.designed_work_finish_time, day.latest_finished_at)%>
 								<% end %>
 								
 							<% else %>
 								<% if day.finished_at.nil? && day.latest_finished_at.present? %>
-									<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f)%>
+									<%= str_times = over_working_times2(@user.designed_work_finish_time, day.latest_finished_at)%>
 							
 								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
-									<%= str_times = over_working_times2(@user.designed_work_finish_time.to_f, day.latest_finished_at.to_f) %>
+									<%= str_times = over_working_times2(@user.designed_work_finish_time, day.latest_finished_at) %>
 								<% end %>
 							<% end %>
 							
@@ -252,44 +254,43 @@
 					</tr>
 				<% end %>
 				<% if @user == current_user %>
-					<%= form_with(model:@user, url: attendances_request_one_month_user_path(@user, date: @last_attendance.worked_on), local: true, method: :patch) do |f| %>
-						<%= f.fields_for @attendance do |one_month| %>
+					<%= f.fields_for @attendance do |one_month| %>
 
-							<tfoot>
-								<tr>
-									<!--rowspan:縦結合、colspan：横結合-->
-									<td></td>
-									<td colspan="2"></td>
-									<td colspan="6"></td>
-									<td><p>【就業合計時間】</p><%= format("%.2f", @working_times.to_f) %></td>
-									<td colspan="3"></td>
-									<td><p>【残業合計時間】</p><%= format("%.2f", @over_working_times.to_f) %></td>
-									<td></td>
-									<td>
-										<% if @user == current_user %>
-											<% if @last_attendance.one_month_status.present? %>
-												<% if @last_attendance.one_month_status == "上長A" || 
-															@last_attendance.one_month_status == "上長B" %>
-													<p>【<%= "#{@last_attendance.one_month_status}：申請中" %>】</p>
-												<% elsif @last_attendance.one_month_status == "承認" ||
-																 @last_attendance.one_month_status == "否認" %>
-													<p>【<%= "勤怠申請:#{@last_attendance.one_month_status}" %>】</p>
-												<% end  %>
-											<% else %>
-												<p>【所長承認：未提出】</p>
-											<% end %>
-											<p><%= one_month.collection_select(:one_month_status, @users, :name, :name)%></p>
-												 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
+						<tfoot>
+							<tr>
+								<!--rowspan:縦結合、colspan：横結合-->
+								<td></td>
+								<td colspan="2"></td>
+								<td colspan="6"></td>
+								<td><p>【就業合計時間】</p><%= format("%.2f", @working_times.to_f) %></td>
+								<td colspan="3"></td>
+								<td><p>【残業合計時間】</p><%= format("%.2f", @over_working_times.to_f) %></td>
+								<td></td>
+								<td>
+									<% if @user == current_user %>
+										<% if @first_attendance.one_month_status.present? %>
+											<% if @first_attendance.one_month_status == "上長A" || 
+														@first_attendance.one_month_status == "上長B" %>
+												<p>【<%= "#{@first_attendance.one_month_status}：申請中" %>】</p>
+											<% elsif @first_attendance.one_month_status == "承認" ||
+															 @first_attendance.one_month_status == "否認" %>
+												<p>【<%= "勤怠申請:#{@first_attendance.one_month_status}" %>】</p>
+											<% end  %>
+										<% else %>
+											<p>【所長承認：未提出】</p>
 										<% end %>
-									</td>
-								</tr>
-							</tfoot>  
-						<% end %>
+										<p><%= one_month.collection_select(:one_month_status, @users, :name, :name)%></p>
+											 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
+									<% end %>
+								</td>
+							</tr>
+						</tfoot>  
 					<% end %>
 				<% end %>
 			</tbody>
 		</table>
 	</div>
+<% end %>
 
 <!--モーダル 表示-->
 <div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>		

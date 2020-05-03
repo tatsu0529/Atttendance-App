@@ -14,8 +14,12 @@ class Attendance < ApplicationRecord
   validate :change_is_needed_when_you_approve_attendance
   
   validate :about_one_month_status
+  validate :about_change_status
+  validate :about_overtime_status
   
   validate :finish_time_is_needed_when_you_request_overtime
+  
+  validate :change_status_is_needed_when_you_request_change
   
   def latest_started_at_is_invalid_without_a_latest_finished_at
     errors.add(:latest_finished_at, "が必要です。") if latest_finished_at.blank? && latest_started_at.present?
@@ -49,10 +53,23 @@ class Attendance < ApplicationRecord
     errors.add(:one_month_status,"は承認か否認を選択してください") if one_month_status == "なし" || one_month_status == "申請中"
   end 
   
+  def about_change_status
+    errors.add(:change_status,"は承認か否認を選択してください") if change_status == "申請中"
+  end 
+  
+  def about_overtime_status
+    errors.add(:ovetime_status,"は承認か否認を選択してください") if overtime_status == "申請中"
+  end 
+  
   def finish_time_is_needed_when_you_request_overtime
     if overtime_status.present?
       errors.add(:finish_time, "を選択してください") if finish_time.blank?
     end 
-  end 
+  end
   
+  def change_status_is_needed_when_you_request_change
+    if latest_started_at.present?
+      errors.add(:change_status, "を選択してください") if change_status.blank?
+    end 
+  end 
 end
