@@ -8,6 +8,7 @@ class Attendance < ApplicationRecord
   validate :latest_started_at_is_invalid_without_a_latest_finished_at
   
   validate :latest_started_at_than_latest_finished_at_fast_if_invalid
+  validate :latest_started_at_is_needed_when_you_request_change
   
   validate :change_is_needed_when_you_approve_change
   validate :change_is_needed_when_you_approve_overtime
@@ -18,8 +19,6 @@ class Attendance < ApplicationRecord
   validate :about_overtime_status
   
   validate :finish_time_is_needed_when_you_request_overtime
-  
-  validate :change_status_is_needed_when_you_request_change
   
   def latest_started_at_is_invalid_without_a_latest_finished_at
     errors.add(:latest_finished_at, "が必要です。") if latest_finished_at.blank? && latest_started_at.present?
@@ -67,9 +66,9 @@ class Attendance < ApplicationRecord
     end 
   end
   
-  def change_status_is_needed_when_you_request_change
-    if latest_started_at.present?
-      errors.add(:change_status, "を選択してください") if change_status.blank?
+  def latest_started_at_is_needed_when_you_request_change
+    if change_status.present?
+      errors.add(:latest_started_at,"の入力がありません。") if latest_started_at.blank?
     end 
   end 
 end

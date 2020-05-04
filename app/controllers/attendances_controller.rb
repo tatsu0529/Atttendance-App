@@ -37,10 +37,12 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
     ActiveRecord::Base.transaction do # トランザクションを開始します。
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
-        attendance.update_attributes!(item)
-      end
+        if item[:change_status].present?
+          attendance.update_attributes!(item)
+        end
+      end 
     end
-    flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
+    flash[:success] = "1ヶ月分の勤怠情報を更新しました。尚、指示者確認が未選択のものは申請されません。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
