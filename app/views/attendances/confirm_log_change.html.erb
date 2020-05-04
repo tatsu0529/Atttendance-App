@@ -36,7 +36,7 @@
               <th><%= l(change_log.finished_at, format: :feather) if change_log.finished_at.present?%></th>
               <th><%= l(change_log.latest_started_at, format: :feather) if change_log.latest_started_at.present?%></th>
               <th><%= l(change_log.latest_finished_at, format: :feather) if change_log.latest_finished_at.present?%></th>
-              <th><%= change_log.instructor %></th>
+              <th><%#= change_log.instructor %></th>
               <th><%= l(change_log.updated_at, format: :light) %></th>
             </tr>
           <% end %>
