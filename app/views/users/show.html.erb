@@ -211,18 +211,18 @@
 						<td class= overtime-hours >
 							<% if day.tomorrow != "1" %>
 								<% if day.finished_at.present? && day.latest_finished_at.nil? %>
-									<%= str_times = working_times(@user.designed_work_finish_time, day.finished_at) %>
+									<%= str_times = over_working_times(@user.designed_work_finish_time, day.finished_at) %>
 									
 								<% elsif day.finished_at.nil? && day.latest_finished_at.present? %>
-									<%= str_times = working_times(@user.designed_work_finish_time, day.latest_finished_at)%>
+									<%= str_times = over_working_times(@user.designed_work_finish_time, day.latest_finished_at) %>
 									
 								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
-									<%= str_times = working_times(@user.designed_work_finish_time, day.latest_finished_at)%>
+									<%= str_times = over_working_times(@user.designed_work_finish_time, day.latest_finished_at) %>
 								<% end %>
 								
 							<% else %>
 								<% if day.finished_at.nil? && day.latest_finished_at.present? %>
-									<%= str_times = over_working_times2(@user.designed_work_finish_time, day.latest_finished_at)%>
+									<%= str_times = over_working_times2(@user.designed_work_finish_time, day.latest_finished_at) %>
 							
 								<% elsif day.finished_at.present? && day.latest_finished_at.present? %>
 									<%= str_times = over_working_times2(@user.designed_work_finish_time, day.latest_finished_at) %>

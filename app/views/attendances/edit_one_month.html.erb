@@ -36,8 +36,22 @@
               <% end %>
               <td><%= attendance.check_box :tomorrow, id: "remember_me"%></td>
               <td>
-                <% if day.started_at.present? && day.finished_at.present? %>
+                <% if day.started_at.present? && day.finished_at.present? &&
+                      day.latest_started_at.nil? && day.latest_finished_at.nil? %>
                   <%= working_times(day.started_at, day.finished_at) %>
+                  
+                <% elsif day.started_at.present? && day.finished_at.present? &&
+                         day.latest_started_at.present? && day.finished_at.present? %>
+                  <%= working_times(day.latest_started_at, day.latest_finished_at) %>
+                  
+                <% elsif day.started_at.nil? && day.finished_at.nil? &&
+                         day.latest_started_at.present? && day.finished_at.present? %>
+                  <%= working_times(day.latest_started_at, day.latest_finished_at) %>
+                  
+                <% elsif day.started_at.present? && day.finished_at.nil? &&
+                         day.latest_started_at.present? && day.finished_at.present? %>
+                  <%= working_times(day.latest_started_at, day.latest_finished_at) %>
+                 
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
