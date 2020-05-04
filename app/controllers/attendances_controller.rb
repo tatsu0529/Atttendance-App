@@ -102,7 +102,7 @@ REPLY_ERROR_MSG = "残業の返信に失敗しました。やり直してくだ�
   
   # 1ヶ月分の勤怠申請確認
   def attendance_confirmation
-    @user = User.joins(:attendances).group("users.id").where.not(attendances: {one_month_status: nil})
+    @user = User.joins(:attendances).group("users.id").where(params[:date])
     @attendance = Attendance.where.not(one_month_status: nil)
   end 
   

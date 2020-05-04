@@ -279,7 +279,9 @@
 										<% else %>
 											<p>【所長承認：未提出】</p>
 										<% end %>
-										<p><%= one_month.collection_select(:one_month_status, @users, :name, :name)%></p>
+										<p>
+											<%= one_month.collection_select(:one_month_status, @users, :name, :name)%>
+										</p>
 											 <%= f.submit yield(:button_text),class: "btn btn-primary" %>
 									<% end %>
 								</td>
